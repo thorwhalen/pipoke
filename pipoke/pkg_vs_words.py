@@ -16,6 +16,8 @@ try:
 except:
     all_words = get_all_words_from_wordnet()
 
+simple_words = set(filter(re.compile('[a-z]+$').match, all_words))
+
 pkg_names = set(pkg_name_stub)
 pkg_names_that_are_words = all_words.intersection(pkg_names)
 
@@ -58,13 +60,20 @@ def words_and_pkg_names_satisfying_regex(regex, print_counts=False):
     :param print_counts: Print count statistics
     :return:
     """
-    return words_and_pkg_names_satisfying_condition(re.compile(regex).match, regex, print_counts)
+    return words_and_pkg_names_satisfying_condition(re.compile(regex).match, print_counts=print_counts, cond_str=regex)
 
 
-def is_not_a_pkg_name(words):
+def is_not_a_pkg_name(regex='.*', words=None):
+    """
+    Filter words, keeping only those that are not already pypi package names.
+    :param regex: Extra (regular expression) filter to apply
+    :param words: The words you want to filter. By default will take all (simple) words of the (wordnet) dictionary.
+    :return: The subset of input words that are not pypi package names
+    """
+    words = words or simple_words
     if isinstance(words, str):
         words = set(map(lambda w: w.strip(), words.split(',')))
-    return set(words).difference(pkg_names)
+    return set(filter(re.compile(regex).match, words)).difference(pkg_names)
 
 
 if __name__ == '__main__':
