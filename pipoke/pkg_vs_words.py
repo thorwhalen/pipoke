@@ -1,9 +1,11 @@
 import inspect
 import re
 import pickle
-
+import pkgutil
 from pipoke import dpath
 from pipoke.pypi_store import pkg_name_stub
+
+builtin_pkg_names = set(pkgutil.iter_modules())
 
 
 def get_all_words_from_wordnet():
@@ -18,7 +20,8 @@ except:
 
 simple_words = set(filter(re.compile('[a-z]+$').match, all_words))
 
-pkg_names = set(pkg_name_stub)
+pypi_pkg_names = set(pkg_name_stub)
+pkg_names = pypi_pkg_names.union(builtin_pkg_names)  # pypi + builtin pkg names
 pkg_names_that_are_words = all_words.intersection(pkg_names)
 
 
