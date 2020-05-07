@@ -12,11 +12,12 @@ def readme():
 
 ujoin = lambda *args: '/'.join(args)
 
-name = os.path.basename(os.path.dirname(__file__))
-version = '0.0.2'
-root_url = 'https://github.com/thorwhalen/'
+name = os.path.split(os.path.dirname(__file__))[-1]
+name = 'pipoke'
+version = '0.0.3'
+root_url = 'https://github.com/thorwhalen'
 
-setup(
+setup_kwargs = dict(
     name=f"{name}",
     version=f'{version}',
     url=ujoin(f"{root_url}", f"{name}"),
@@ -37,3 +38,8 @@ setup(
     download_url=ujoin(f'{root_url}', f'archive/v{version}.zip'),
 
 )
+
+import json
+print(json.dumps(setup_kwargs, indent=2))
+
+setup(**setup_kwargs)
