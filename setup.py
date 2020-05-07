@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pipoke',
-    version='0.0.1',
+    version='0.0.2',
     url='https://github.com/thorwhalen/pipoke',
     license='Apache Software License',
     author='Thor Whalen',
