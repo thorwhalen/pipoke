@@ -2,10 +2,47 @@ from string import Formatter
 
 dflt_formatter = Formatter()
 
+
 def increment_version(version_str):
     version_nums = list(map(int, version_str.split('.')))
     version_nums[-1] += 1
     return '.'.join(map(str, version_nums))
+
+
+def my_setup(**setup_kwargs):
+    from setuptools import setup
+    import json
+    print("Setup params -------------------------------------------------------")
+    print(json.dumps(setup_kwargs, indent=2))
+    print("--------------------------------------------------------------------")
+    setup(**setup_kwargs)
+
+
+def ujoin(*args):
+    """Join strings with the url seperator (/).
+
+    Note that will add a / where it's missing (as in between 'https://pypi.org' and 'project/'),
+    and only use one if two consecutive tokens use respectively end and start with a /
+    (as in 'project/' and '/pipoke/').
+
+    >>> ujoin('https://pypi.org', 'project/', '/pipoke/')
+    'https://pypi.org/project/pipoke/'
+
+    Extremal cases
+    >>> ujoin('https://pypi.org')
+    'https://pypi.org'
+    >>> ujoin('https://pypi.org/')
+    'https://pypi.org/'
+    >>> ujoin('')
+    ''
+    >>> ujoin()
+    ''
+    """
+    if len(args) == 0 or len(args[0]) == 0:
+        return ''
+    return ((args[0][0] == '/') * '/'  # prepend slash if first arg starts with it
+            + '/'.join(x[(x[0] == '/'):(len(x) - (x[-1] == '/'))] for x in args)
+            + (args[-1][-1] == '/') * '/')  # append slash if last arg ends with it
 
 
 ########### Partial and incremental formatting #########################################################################
@@ -112,5 +149,3 @@ def format_str_vals_of_dict(d, *, max_formatting_loops=10, **kwargs):
                          f"Those fields are: {set(_fields_to_format(d)) - (set(d) | set(kwargs))}")
 
     return d
-
-
