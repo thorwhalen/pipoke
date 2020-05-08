@@ -20,7 +20,7 @@ def my_setup(print_params=True, **setup_kwargs):
 
 
 name = os.path.split(os.path.dirname(__file__))[-1]
-version = '0.0.3'
+version = '0.0.4'
 root_url = 'https://github.com/thorwhalen'
 
 setup_kwargs = dict(
@@ -63,5 +63,5 @@ my_setup(**setup_kwargs)
 #     include_package_data=True,
 #     platforms='any',
 # )
-
+#
 # my_setup(**setup_kwargs)
