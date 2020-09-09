@@ -19,8 +19,13 @@ for _dirpath in [rootdir, dpath()]:
         os.mkdir(_dirpath)
 
 from pipoke.pkg_vs_words import (
+    available_simple_words,
     simple_words,
     all_words,
+    pypi_pkg_names,
+    builtin_pkg_names,
+    builtin_obj_names,
+    py_reserved_words,
     words_and_pkg_names_satisfying_condition,
     words_and_pkg_names_satisfying_regex,
     is_not_a_pkg_name

@@ -1,4 +1,5 @@
 # data/setup_kwargs.ini
+data/pkg_list.p
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

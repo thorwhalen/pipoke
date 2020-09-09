@@ -2,10 +2,20 @@ import inspect
 import re
 import pickle
 import pkgutil
+import builtins
 from pipoke import dpath
 from pipoke.pypi_store import pkg_name_stub
 
 builtin_pkg_names = set(pkgutil.iter_modules())
+builtin_obj_names = {x.lower() for x in dir(builtins)}
+
+py_reserved_words = {
+    'and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'exec', 'finally',
+    'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise', 'return',
+    'try', 'while', 'with', 'yield'
+}
+
+builtin_names = builtin_pkg_names | builtin_obj_names | py_reserved_words
 
 
 def get_all_words_from_wordnet():
@@ -21,8 +31,10 @@ except:
 simple_words = set(filter(re.compile('[a-z]+$').match, all_words))
 
 pypi_pkg_names = set(pkg_name_stub)
-pkg_names = pypi_pkg_names.union(builtin_pkg_names)  # pypi + builtin pkg names
+pkg_names = pypi_pkg_names.union(builtin_names)  # pypi + builtin pkg names
 pkg_names_that_are_words = all_words.intersection(pkg_names)
+
+available_simple_words = simple_words - pkg_names
 
 
 def str_for_func(func):

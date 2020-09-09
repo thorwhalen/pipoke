@@ -1,3 +1,5 @@
+import os
+
 import requests
 from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
@@ -60,12 +62,19 @@ def get_updated_pkg_name_stub():
     return {str(x.contents[0]).lower(): pkg_name_re.match(x.get('href')).group(1) for x in gen_find(t, 'a')}
 
 
-def refresh_saved_pkg_name_stub():
+def refresh_saved_pkg_name_stub(verbose=True):
     """
     Update the {pkg_name: pkg_stub} stored data with a fresh call to get_updated_pkg_name_stub
     """
+    n = 0
+    if verbose:
+        n = (os.path.isfile(pkg_names_filepath)
+             and len(pickle.load(open(pkg_names_filepath, 'rb')))) or 0
     pkg_name_stub = get_updated_pkg_name_stub()
     pickle.dump(pkg_name_stub, open(pkg_names_filepath, 'wb'))
+    if verbose:
+        print(f"Updated the pkg_name_stub. Had {n} items; now has {len(pkg_name_stub)}."
+              f" The dict is saved here: {pkg_names_filepath}")
 
 
 def info_of_pkg_from_web(pkg_name):
