@@ -1,7 +1,47 @@
 __author__ = 'thorwhalen'
 
+from collections import ChainMap
 import os
 
-rootdir = os.path.dirname(__file__)
-ppath = lambda path: os.path.join(rootdir, path)
-dpath = lambda path: os.path.join(rootdir, 'data', path)
+proj_rootdir = os.path.dirname(__file__)
+DFLT_ROOTDIR = proj_rootdir
+ROOTDIR_ENV_VAR = 'PIPOKE_ROOTDIR'
+
+resources = ChainMap(os.environ)
+
+rootdir = resources.get(ROOTDIR_ENV_VAR, DFLT_ROOTDIR)
+
+ppath = lambda path='': os.path.join(rootdir, path)
+dpath = lambda path='': os.path.join(rootdir, 'data', path)
+
+for _dirpath in [rootdir, dpath()]:
+    if not os.path.isdir(_dirpath):
+        os.mkdir(_dirpath)
+
+from pipoke.pkg_vs_words import (
+    simple_words,
+    all_words,
+    words_and_pkg_names_satisfying_condition,
+    words_and_pkg_names_satisfying_regex,
+    is_not_a_pkg_name
+)
+from pipoke.pypi_store import (
+    pkg_name_stub,
+    refresh_saved_pkg_name_stub,
+    info_of_pkg_from_web
+)
+from pipoke.distribution import (
+    get_version,
+)
+
+__all__ = [
+    "simple_words",
+    "all_words",
+    "words_and_pkg_names_satisfying_condition",
+    "words_and_pkg_names_satisfying_regex",
+    "is_not_a_pkg_name",
+    "pkg_name_stub",
+    "refresh_saved_pkg_name_stub",
+    "info_of_pkg_from_web",
+    "get_version"
+]

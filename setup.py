@@ -1,5 +1,3 @@
-import os
-
 
 def readme():
     try:
@@ -19,7 +17,8 @@ def my_setup(print_params=True, **setup_kwargs):
     setup(**setup_kwargs)
 
 
-name = os.path.split(os.path.dirname(__file__))[-1]
+# name = os.path.split(os.path.dirname(__file__))[-1]
+name = 'pipoke'
 version = '0.0.4'
 root_url = 'https://github.com/thorwhalen'
 
@@ -32,7 +31,9 @@ setup_kwargs = dict(
     install_requires=[
         'bs4',
         'requests',
-        'argh'
+        'argh',
+        'py2store',
+        'i2'
     ],
     author_email='thorwhalen1@gmail.com',
     description='Utils to acquire stuff from pypi and interrogate it.',
@@ -41,7 +42,7 @@ setup_kwargs = dict(
     platforms='any',
     long_description=readme(),
     long_description_content_type="text/markdown",
-    download_url=f'{root_url}/{name}/archive/v{version}.zip',
+    # download_url=f'{root_url}/{name}/archive/v{version}.zip',
 
 )
 
