@@ -40,6 +40,7 @@ from pipoke.distribution import (
 )
 
 __all__ = [
+    "available_simple_words",
     "simple_words",
     "all_words",
     "words_and_pkg_names_satisfying_condition",

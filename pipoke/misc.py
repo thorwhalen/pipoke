@@ -3,6 +3,41 @@
 
 from pipoke.pkg_vs_words import *
 
+
+def is_from_module(obj, module):
+    """Check if an object "belongs" to a module.
+
+    >>> import collections
+    >>> is_from_module(collections.ChainMap, collections)
+    True
+    >>> is_from_module(is_from_module, collections)
+    False
+    """
+    return getattr(obj, '__module__', '').startswith(module.__name__)
+
+
+def second_party_names(module, obj_filt=None):
+    """Generator of module attribute names that point to object the module actually defines.
+
+    :param module: Module (object)
+    :param obj_filt: Boolean function applied to object to filter it in
+    :return:
+
+    >>> from ut.util.code import modules
+    >>> sorted(second_party_names(modules))[:5]
+    ['DOTPATH', 'FILEPATH', 'FOLDERPATH', 'LOADED', 'ModuleSpecKind']
+    >>> sorted(second_party_names(modules, callable))[:5]
+    ['ModuleSpecKind', 'coerce_module_spec', 'get_imported_module_paths', 'is_from_module', 'is_module_dotpath']
+    >>> sorted(second_party_names(modules, lambda obj: isinstance(obj, type)))
+    ['ModuleSpecKind']
+    """
+    obj_filt = obj_filt or (lambda x: x)
+    for attr in filter(lambda a: not a.startswith('_'), dir(module)):
+        obj = getattr(module, attr)
+        if is_from_module(obj, module) and obj_filt(obj):
+            yield attr
+
+
 n_words = len(simple_words)
 n_pkgs = len(pkg_names)
 
