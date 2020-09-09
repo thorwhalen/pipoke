@@ -19,7 +19,7 @@ def my_setup(print_params=True, **setup_kwargs):
 
 # name = os.path.split(os.path.dirname(__file__))[-1]
 name = 'pipoke'
-version = '0.0.4'
+version = '0.0.5'
 root_url = 'https://github.com/thorwhalen'
 
 setup_kwargs = dict(
