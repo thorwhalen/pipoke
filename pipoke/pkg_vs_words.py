@@ -3,10 +3,27 @@ import re
 import pickle
 import pkgutil
 import builtins
+import os
+
 from pipoke import dpath
 from pipoke.pypi_store import pkg_name_stub
 
-builtin_pkg_names = set(pkgutil.iter_modules())
+standard_lib_dir = os.path.dirname(os.__file__)
+
+
+def is_standard_lib_path(path):
+    return path.startswith(standard_lib_dir)
+
+
+def standard_lib_module_names(is_standard_lib_path=is_standard_lib_path,
+                              name_filt=lambda name: not name.startswith('_')):
+    return filter(name_filt, (module_info.name for module_info in pkgutil.iter_modules()
+                              if is_standard_lib_path(module_info.module_finder.path)))
+
+
+local_pkg_names = {x.name for x in pkgutil.iter_modules() if x.ispkg}
+
+builtin_pkg_names = set(standard_lib_module_names())
 builtin_obj_names = {x.lower() for x in dir(builtins)}
 
 py_reserved_words = {
