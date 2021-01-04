@@ -23,7 +23,7 @@ def second_party_names(module, obj_filt=None):
     :param obj_filt: Boolean function applied to object to filter it in
     :return:
 
-    >>> from ut.util.code import modules
+    >>> from tec import modules  # pip install tec
     >>> sorted(second_party_names(modules))[:5]
     ['DOTPATH', 'FILEPATH', 'FOLDERPATH', 'LOADED', 'ModuleSpecKind']
     >>> sorted(second_party_names(modules, callable))[:5]
