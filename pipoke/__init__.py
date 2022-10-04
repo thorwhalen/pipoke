@@ -37,6 +37,10 @@ from pipoke.pypi_store import (
 )
 from pipoke.distribution import (
     get_version,
+    json_package_info,
+    release_versions,
+    release_dates,
+    last_release_date,
 )
 
 __all__ = [

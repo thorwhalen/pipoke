@@ -16,13 +16,65 @@ from packaging.version import parse
 URL_PATTERN = 'https://pypi.python.org/pypi/{package}/json'
 
 
+def json_package_info(package, url_pattern=URL_PATTERN):
+    """Return version of package on pypi.python.org using json.
+
+    >>> d = json_package_info('ps')
+    >>> isinstance(d, dict)
+    True
+    >>> {'name', 'author', 'version'}.issubset(d['info'])
+    True
+
+    """
+    response = requests.get(url_pattern.format(package=package))
+    if response.status_code == requests.codes.ok:
+        return response.json()
+    else:
+        return dict()
+
+
+def _is_package_info_dict(package_info):
+    # TODO: make it stronger, verifying the presence of required fields
+    return isinstance(package_info, dict)
+
+
+def ensure_json_package_info(package_info):
+    """
+    Gets and validates package info dicts from various sources.
+
+    Namely, this is used in functions like ``releases``, ``release_dates`` etc. so
+    that we can use them bother as fetcher+parser and as  parsers (giving them the
+    same info dict we already fetched, so we don't have to fetch the info twice).
+    """
+    if isinstance(package_info, str):
+        package_name = package_info
+        package_info = json_package_info(package_name)
+    assert _is_package_info_dict(
+        package_info
+    ), f'Not a valid package_info dict: {package_info}'
+    return package_info
+
+
+def release_versions(package):
+    d = ensure_json_package_info(package)
+    return list(d)
+
+
+def release_dates(package):
+    d = ensure_json_package_info(package)
+    return [dd[-1]['upload_time'] for dd in d['releases'].values()]
+
+
+def last_release_date(package):
+    return release_dates(package)[-1]
+
+
 def get_version(package, url_pattern=URL_PATTERN):
     """Return version of package on pypi.python.org using json.
 
-    ```
-    >>> get_version('py2store')
-    '0.0.7'
-    ```
+    >>> get_version('py2store')  # doctest: +SKIP
+    '0.1.15'
+
     """
     req = requests.get(url_pattern.format(package=package))
     version = parse('0')
@@ -39,9 +91,10 @@ def get_version(package, url_pattern=URL_PATTERN):
 def my_setup(**setup_kwargs):
     from setuptools import setup
     import json
-    print("Setup params -------------------------------------------------------")
+
+    print('Setup params -------------------------------------------------------')
     print(json.dumps(setup_kwargs, indent=2))
-    print("--------------------------------------------------------------------")
+    print('--------------------------------------------------------------------')
     setup(**setup_kwargs)
 
 
@@ -67,9 +120,11 @@ def ujoin(*args):
     """
     if len(args) == 0 or len(args[0]) == 0:
         return ''
-    return ((args[0][0] == '/') * '/'  # prepend slash if first arg starts with it
-            + '/'.join(x[(x[0] == '/'):(len(x) - (x[-1] == '/'))] for x in args)
-            + (args[-1][-1] == '/') * '/')  # append slash if last arg ends with it
+    return (
+        (args[0][0] == '/') * '/'  # prepend slash if first arg starts with it
+        + '/'.join(x[(x[0] == '/') : (len(x) - (x[-1] == '/'))] for x in args)
+        + (args[-1][-1] == '/') * '/'
+    )  # append slash if last arg ends with it
 
 
 ########### Partial and incremental formatting #########################################################################
@@ -93,6 +148,7 @@ partial_formatter = PartialFormatter()
 
 
 # TODO: For those who love algorithmic optimization, there's some wasted to cut out here below.
+
 
 def _unformatted(d):
     for k, v in d.items():
@@ -159,8 +215,10 @@ def format_str_vals_of_dict(d, *, max_formatting_loops=10, **kwargs):
     missing_fields = set(_fields_to_format(d)) - provided_fields
 
     if missing_fields:
-        raise ValueError("I won't be able to complete that. You'll need to provide the values for:\n" +
-                         f"  {', '.join(missing_fields)}")
+        raise ValueError(
+            "I won't be able to complete that. You'll need to provide the values for:\n"
+            + f"  {', '.join(missing_fields)}"
+        )
 
     for i in range(max_formatting_loops):
         unformatted = set(_unformatted(d))
@@ -171,8 +229,10 @@ def format_str_vals_of_dict(d, *, max_formatting_loops=10, **kwargs):
         else:
             break
     else:
-        raise ValueError(f"There are still some unformatted fields, "
-                         f"but I reached my max {max_formatting_loops} allowed loops. " +
-                         f"Those fields are: {set(_fields_to_format(d)) - (set(d) | set(kwargs))}")
+        raise ValueError(
+            f'There are still some unformatted fields, '
+            f'but I reached my max {max_formatting_loops} allowed loops. '
+            + f'Those fields are: {set(_fields_to_format(d)) - (set(d) | set(kwargs))}'
+        )
 
     return d

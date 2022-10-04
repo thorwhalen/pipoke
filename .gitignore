@@ -1,12 +1,14 @@
-# data/setup_kwargs.ini
-data/pkg_list.p
-deploy.py
+wads_configs.json
+data/wads_configs.json
+wads/data/wads_configs.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
+
+.DS_Store
 # C extensions
 *.so
 
@@ -28,6 +30,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+_build
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -106,3 +109,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# PyCharm
+.idea
