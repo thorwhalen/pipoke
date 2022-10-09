@@ -1,3 +1,5 @@
+"""pipoke"""
+
 __author__ = 'thorwhalen'
 
 from collections import ChainMap
@@ -31,9 +33,11 @@ from pipoke.pkg_vs_words import (
     is_not_a_pkg_name
 )
 from pipoke.pypi_store import (
+    Pypi,
     pkg_name_stub,
     refresh_saved_pkg_name_stub,
-    info_of_pkg_from_web
+    info_of_pkg_from_web,
+    slurp_user_projects_info
 )
 from pipoke.distribution import (
     get_version,

@@ -27,8 +27,10 @@ builtin_pkg_names = set(standard_lib_module_names())
 builtin_obj_names = {x.lower() for x in dir(builtins)}
 
 py_reserved_words = {
-    'and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'exec', 'finally',
-    'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise', 'return',
+    'and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else',
+    'except', 'exec', 'finally',
+    'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'not', 'or', 'pass',
+    'print', 'raise', 'return',
     'try', 'while', 'with', 'yield'
 }
 

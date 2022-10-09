@@ -16,6 +16,8 @@ from packaging.version import parse
 URL_PATTERN = 'https://pypi.python.org/pypi/{package}/json'
 
 
+# TODO: Use yb or merge functionality there if missing for json_package_info and
+#  derivatives.
 def json_package_info(package, url_pattern=URL_PATTERN):
     """Return version of package on pypi.python.org using json.
 
@@ -127,11 +129,11 @@ def ujoin(*args):
     )  # append slash if last arg ends with it
 
 
-########### Partial and incremental formatting #########################################################################
+########### Partial and incremental formatting ##########################################
 class PartialFormatter(Formatter):
     """A string formatter that won't complain if the fields are only partially formatted.
-    But note that you will lose the spec part of your template (e.g. in {foo:1.2f}, you'll loose the 1.2f
-    if not foo is given -- but {foo} will remain).
+    But note that you will lose the spec part of your template (e.g. in {foo:1.2f},
+    you'll loose the 1.2f if not foo is given -- but {foo} will remain).
     """
 
     def get_value(self, key, args, kwargs):
@@ -164,11 +166,13 @@ def _fields_to_format(d):
 
 def format_str_vals_of_dict(d, *, max_formatting_loops=10, **kwargs):
     """
+    Traverse the values of a dict and apply string formatting to them, recursively.
 
-    :param d:
-    :param max_formatting_loops:
-    :param kwargs:
-    :return:
+    :param d: The template dict containing both format strings to be populated/embodied
+    and (possibly) values to do so.
+    :param max_formatting_loops: The maximum number of loops.
+    :param kwargs: Extra values to use to populate string formats
+    :return: A (shallow) copy of the filled out (i.e. populated/embodied) dict
 
     >>> d = {
     ...     'filepath': '{root}/{file}.{ext}',
@@ -177,17 +181,19 @@ def format_str_vals_of_dict(d, *, max_formatting_loops=10, **kwargs):
     >>> format_str_vals_of_dict(d, root='ROOT', file='FILE')
     {'filepath': 'ROOT/FILE.txt', 'ext': 'txt'}
 
-    Note that if the input mapping `d` and the kwargs have a conflict, the mapping version is used!
+    Note that if the input mapping `d` and the kwargs have a conflict, the mapping
+    version is used!
 
     >>> format_str_vals_of_dict(d, root='ROOT', file='FILE', ext='will_not_be_used')
     {'filepath': 'ROOT/FILE.txt', 'ext': 'txt'}
 
     But if you want to override an input mapping, you can -- the usual way:
+
     >>> format_str_vals_of_dict(dict(d, ext='will_be_used'), root='ROOT', file='FILE')
     {'filepath': 'ROOT/FILE.will_be_used', 'ext': 'will_be_used'}
 
-    If you don't provide enough fields to satisfy all the format fields in the values of `d`,
-    you'll be told to bugger off.
+    If you don't provide enough fields to satisfy all the format fields in the values
+    of ``d``, you'll be told to bugger off.
 
     >>> format_str_vals_of_dict(d, root='ROOT')
     Traceback (most recent call last):
@@ -196,6 +202,7 @@ def format_str_vals_of_dict(d, *, max_formatting_loops=10, **kwargs):
       file
 
     And it's recursive...
+
     >>> d = {
     ...     'filepath': '{root}/{filename}',
     ...     'filename': '{file}.{ext}'
@@ -204,7 +211,8 @@ def format_str_vals_of_dict(d, *, max_formatting_loops=10, **kwargs):
     >>> format_str_vals_of_dict(d, **my_configs)
     {'filepath': 'ROOT/FILE.EXT', 'filename': 'FILE.EXT'}
 
-    # TODO: Could make the above work if filename is give, but not file nor ext! At least as an option.
+    # TODO: Could make the above work if filename is give, but not file nor ext!
+    #  At least as an option.
 
     """
     d = dict(**d)  # make a shallow copy
