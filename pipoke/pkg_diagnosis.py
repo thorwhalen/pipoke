@@ -251,7 +251,7 @@ def dflt_json_info_extractor(pkg_name):
     info_dict = package_info(pkg_name)
     extractor = path_get.paths_getter(
         ['info.description', 'info.summary', 'info.author', 'info.version', 'releases'],
-        on_error = path_get.return_none_on_error,
+        on_error=path_get.return_none_on_error,
     )
     d = extractor(info_dict)
     releases = d.pop('releases')
@@ -458,8 +458,7 @@ def get_pyenv_virtualenv_path(virtual_environment_name):
         return None
 
 
-# script to run diagnose_pkgs from the command line
-if __name__ == '__main__':
+def main():
     import argparse
 
     parser = argparse.ArgumentParser(
@@ -496,3 +495,8 @@ if __name__ == '__main__':
 
     # print the results
     print(json.dumps(d, indent=2))
+
+
+# script to run diagnose_pkgs from the command line
+if __name__ == '__main__':
+    main()
