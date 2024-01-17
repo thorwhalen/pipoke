@@ -250,16 +250,27 @@ def dflt_json_info_extractor(pkg_name):
 
     info_dict = package_info(pkg_name)
     extractor = path_get.paths_getter(
-        ['info.description', 'info.summary', 'info.author', 'info.version', 'releases'],
+        [
+            'info.description',
+            'info.summary',
+            'info.author',
+            'info.version',
+            'info.project_urls',
+            'info.home_page',
+            'releases',
+        ],
         on_error=path_get.return_none_on_error,
     )
     d = extractor(info_dict)
-    releases = d.pop('releases')
+    releases = d.pop('releases', ())
+    d['n_releases'] = len(releases)
     if releases:
         release = next(iter(releases[d['info.version']]), None)
         if release:
-            d['release.size'] = release.get('size', None)
-            d['relase.upload_time_iso_8601'] = release.get('upload_time_iso_8601', None)
+            d['last_release.size'] = release.get('size', None)
+            d['last_relase.upload_time_iso_8601'] = release.get(
+                'upload_time_iso_8601', None
+            )
     return d
 
 
