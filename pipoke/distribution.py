@@ -1,3 +1,4 @@
+"""Tools to run on PyPi distribution of packages."""
 from string import Formatter
 
 dflt_formatter = Formatter()
@@ -35,6 +36,9 @@ def json_package_info(package, url_pattern=URL_PATTERN):
         return dict()
 
 
+package_info = json_package_info
+
+
 def _is_package_info_dict(package_info):
     # TODO: make it stronger, verifying the presence of required fields
     return isinstance(package_info, dict)
@@ -53,7 +57,7 @@ def ensure_json_package_info(package_info):
         package_info = json_package_info(package_name)
     assert _is_package_info_dict(
         package_info
-    ), f'Not a valid package_info dict: {package_info}'
+    ), f'Not a valid package_info_ dict: {package_info}'
     return package_info
 
 
@@ -127,6 +131,7 @@ def ujoin(*args):
         + '/'.join(x[(x[0] == '/') : (len(x) - (x[-1] == '/'))] for x in args)
         + (args[-1][-1] == '/') * '/'
     )  # append slash if last arg ends with it
+
 
 
 ########### Partial and incremental formatting ##########################################

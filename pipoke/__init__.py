@@ -30,21 +30,31 @@ from pipoke.pkg_vs_words import (
     py_reserved_words,
     words_and_pkg_names_satisfying_condition,
     words_and_pkg_names_satisfying_regex,
-    is_not_a_pkg_name
+    is_not_a_pkg_name,
 )
 from pipoke.pypi_store import (
     Pypi,
     pkg_name_stub,
     refresh_saved_pkg_name_stub,
     info_of_pkg_from_web,
-    slurp_user_projects_info
+    slurp_user_projects_info,
 )
 from pipoke.distribution import (
     get_version,
+    package_info,  # alias of json_package_info
     json_package_info,
     release_versions,
     release_dates,
     last_release_date,
+)
+
+from pipoke.pkg_diagnosis import (
+    run_folder_diagnosis,
+    run_pkg_diagnosis,
+    run_pkg_tests,
+    create_virtualenv,  # create a virtualenv for a given package
+    diagnose_pkg,  # diagnose a package
+    diagnose_pkgs,  # diagnose a list of packages
 )
 
 __all__ = [
@@ -57,5 +67,5 @@ __all__ = [
     "pkg_name_stub",
     "refresh_saved_pkg_name_stub",
     "info_of_pkg_from_web",
-    "get_version"
+    "get_version",
 ]
