@@ -258,8 +258,8 @@ def dflt_json_info_extractor(pkg_name):
     if releases:
         release = next(iter(releases[d['info.version']]), None)
         if release:
-            d['release.size'] = release['size']
-            d['relase.upload_time_iso_8601'] = release['upload_time_iso_8601']
+            d['release.size'] = release.get('size', None)
+            d['relase.upload_time_iso_8601'] = release.get('upload_time_iso_8601', None)
     return d
 
 
