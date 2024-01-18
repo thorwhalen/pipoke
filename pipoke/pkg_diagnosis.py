@@ -8,7 +8,16 @@ import sys
 import subprocess
 import pkg_resources
 import json
-from typing import Union, Iterable, Tuple, Callable, Dict, Mapping
+from typing import (
+    Union,
+    Iterable,
+    Tuple,
+    Callable,
+    Dict,
+    Mapping,
+    Protocol,
+    runtime_checkable,
+)
 
 
 def current_virtual_environment_path():
@@ -318,14 +327,50 @@ def _resolve_packages(pkgs: Union[str, Iterable[str]]):
     return pkgs
 
 
+@runtime_checkable
+class Settable(Protocol):
+    """A protocol for objects obj that support obj[k] = v"""
+
+    def __setitem__(self, k, v):
+        """The method controlling self[k] = v"""
+
+
+def _resolve_store_factory(store_factory: Union[str, Callable[[], Settable]]):
+    if isinstance(store_factory, str):
+        if store_factory == 'dict':
+            store_factory = dict
+        elif os.path.isdir(store_factory):
+            dirpath = store_factory
+            from dol import JsonFiles
+
+            store_factory = lambda: JsonFiles(dirpath)
+        else:
+            raise ValueError(
+                f"Unknown store factory (if it's a folder, it doesn't exist: "
+                f"{store_factory}"
+            )
+    return store_factory
+
+
 def diagnose_pkgs(
-    pkgs: Iterable[str], diagnoses: Union[Diagnoses, Iterable[str]] = DFLT_DIAGNOSES
+    pkgs: Union[str, Iterable[str]],
+    diagnoses: Union[Diagnoses, Iterable[str]] = DFLT_DIAGNOSES,
+    store_factory: Union[str, Callable[[], Settable]] = dict,
 ):
+    """Diagnose a list of packages
+
+    :param pkgs: A list of packages to diagnose (or a filepath to a requirements file)
+    :param diagnoses: What diagnoses to run
+        (dict, (name, func) pairs, or requirements file)
+    :param store_factory: A factory that makes a store to store the results.
+        If an (existing) folder path, will be stored in json files under that folder
+    """
     pkgs = _resolve_packages(pkgs)
     diagnoses = _resolve_diagnoses(diagnoses)
+    store_factory = _resolve_store_factory(store_factory)
     if isinstance(pkgs, str):
         pkgs = pkgs.split()
-    d = {}
+    d = store_factory()
     for pkg in pkgs:
         d[pkg] = diagnose_pkg(pkg, diagnoses=diagnoses)
     return d
@@ -589,6 +634,17 @@ def main():
         ),
     )
     parser.add_argument(
+        '--store_factory',
+        type=str,
+        default='dict',
+        help=(
+            'A factory for a store to store the results. '
+            'Can be a folder path (in which case a Files store will be created in that folder), '
+            'or "dict" (in which case a dict will be used), '
+            'or any other string (in which case a dict will be used).'
+        ),
+    )
+    parser.add_argument(
         '--install_pkg_if_not_installed',
         type=bool,
         default=True,
@@ -607,6 +663,7 @@ def main():
     d = diagnose_pkgs(args.packages, args.diagnoses)
 
     # print the results
+    print('------ RESULTS ------')
     print(json.dumps(d, indent=2))
 
 
