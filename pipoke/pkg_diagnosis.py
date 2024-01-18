@@ -1,6 +1,12 @@
 """Pip installed package diagnosis
 The tools here will help you install and diagnose packages in a test virtual 
 environment.
+
+Here, checkout diagnose_pkgs, which takes a list of packages and runs a list of
+diagnoses on each package, returning a dictionary of the results.
+This functionality is also available from the command line using the script
+diagnose_pkgs.py (or the shell script diagnose-pkgs).
+
 """
 
 import os
