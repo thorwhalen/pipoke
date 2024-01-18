@@ -306,9 +306,22 @@ def _resolve_diagnoses(diagnoses: Diagnoses) -> DiagnosisDict:
     return diagnoses
 
 
+def _resolve_packages(pkgs: Union[str, Iterable[str]]):
+    """Resolve a string of packages or a filepath to a requirements file
+    to a list of packages"""
+    if isinstance(pkgs, str):
+        if os.path.isfile(pkgs):
+            with open(pkgs) as f:
+                pkgs = f.readlines()
+        else:
+            pkgs = pkgs.split()
+    return pkgs
+
+
 def diagnose_pkgs(
     pkgs: Iterable[str], diagnoses: Union[Diagnoses, Iterable[str]] = DFLT_DIAGNOSES
 ):
+    pkgs = _resolve_packages(pkgs)
     diagnoses = _resolve_diagnoses(diagnoses)
     if isinstance(pkgs, str):
         pkgs = pkgs.split()
@@ -544,7 +557,10 @@ def get_pyenv_virtualenv_path(virtual_environment_name):
         # Handle the case where pyenv is not found
         return None
 
+
 import yp
+
+
 def main():
     import argparse
 
@@ -556,7 +572,11 @@ def main():
         metavar='package',
         type=str,
         nargs='+',
-        help='The names of the packages to diagnose',
+        help=(
+            'The names of the packages to diagnose. Could be a single package name or '
+            'multiple package names separated by strings. Could also be a local '
+            'filepath to a requirements file (any file whose lines are pip installable)'
+        ),
     )
     diagnoses_names = ', '.join(name for name, _ in DFLT_DIAGNOSES)
     parser.add_argument(
@@ -566,7 +586,7 @@ def main():
         help=(
             f'The names of the diagnoses to run. Any combination of: {diagnoses_names}. '
             'If not specified, all diagnoses will be run.'
-        )
+        ),
     )
     parser.add_argument(
         '--install_pkg_if_not_installed',
