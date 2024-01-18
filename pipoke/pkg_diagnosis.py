@@ -253,11 +253,33 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
         return None
 
 
+URL_PATTERN = 'https://pypi.python.org/pypi/{package}/json'
+
+
+# Note: Also found in pipoke.distribution and yb package
+def json_package_info(package, url_pattern=URL_PATTERN):
+    """Return version of package on pypi.python.org using json.
+
+    >>> d = json_package_info('ps')
+    >>> isinstance(d, dict)
+    True
+    >>> {'name', 'author', 'version'}.issubset(d['info'])
+    True
+
+    """
+    import requests
+
+    response = requests.get(url_pattern.format(package=package))
+    if response.status_code == requests.codes.ok:
+        return response.json()
+    else:
+        return dict()
+
+
 def dflt_json_info_extractor(pkg_name):
-    from pipoke.distribution import package_info
     from dol import path_get
 
-    info_dict = package_info(pkg_name)
+    info_dict = json_package_info(pkg_name)
     extractor = path_get.paths_getter(
         [
             'info.description',
@@ -298,6 +320,9 @@ DFLT_DIAGNOSES = (
     ('test_diagnosis_result', run_pkg_tests),
 )
 
+diagnosis_funcs = dict(DFLT_DIAGNOSES)
+diagnosis_funcs['all_json_info'] = json_package_info
+
 
 def _resolve_diagnoses(diagnoses: Diagnoses) -> DiagnosisDict:
     if not isinstance(diagnoses, Mapping):
@@ -305,12 +330,11 @@ def _resolve_diagnoses(diagnoses: Diagnoses) -> DiagnosisDict:
             diagnoses = [diagnoses]
 
         def resolve_string_diagnoses(diagnoses):
-            dflt_diagnosis_dict = dict(DFLT_DIAGNOSES)
             for d in diagnoses:
                 if isinstance(d, str):
                     name = d
-                    if name in dflt_diagnosis_dict:
-                        yield name, dflt_diagnosis_dict[name]
+                    if name in diagnosis_funcs:
+                        yield name, diagnosis_funcs[name]
                     else:
                         raise ValueError(f"Unknown diagnosis name: {name}")
                 else:
@@ -629,7 +653,7 @@ def main():
             'filepath to a requirements file (any file whose lines are pip installable)'
         ),
     )
-    diagnoses_names = ', '.join(name for name, _ in DFLT_DIAGNOSES)
+    diagnoses_names = ', '.join(name for name, _ in diagnosis_funcs)
     parser.add_argument(
         '--diagnoses',
         type=str,
