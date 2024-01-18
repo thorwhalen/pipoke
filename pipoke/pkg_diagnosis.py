@@ -8,7 +8,7 @@ import sys
 import subprocess
 import pkg_resources
 import json
-from typing import Union, Iterable
+from typing import Union, Iterable, Tuple, Callable, Dict, Mapping
 
 
 def current_virtual_environment_path():
@@ -88,13 +88,16 @@ def activate_virtualenv(virtualenv_path):
         raise RuntimeError("Failed to activate the virtual environment")
 
 
-def install_package(pkg_name, virtual_env=DFLT_TEST_ENV):
+def install_package(pkg_name, virtual_env=DFLT_TEST_ENV, *, verbose=True):
     """
     Install a package in the virtual environment if not already installed.
     """
     try:
+        capture_output = not verbose
         subprocess.run(
-            [os.path.join(virtual_env, 'bin', 'pip'), 'install', pkg_name], check=True
+            [os.path.join(virtual_env, 'bin', 'pip'), 'install', pkg_name],
+            capture_output=capture_output,
+            check=True,
         )
     except subprocess.CalledProcessError:
         pass
@@ -235,15 +238,6 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
         return None
 
 
-def diagnose_pkgs(pkgs: Iterable[str]):
-    if isinstance(pkgs, str):
-        pkgs = pkgs.split()
-    d = {}
-    for pkg in pkgs:
-        d[pkg] = diagnose_pkg(pkg)
-    return d
-
-
 def dflt_json_info_extractor(pkg_name):
     from pipoke.distribution import package_info
     from dol import path_get
@@ -274,88 +268,170 @@ def dflt_json_info_extractor(pkg_name):
     return d
 
 
+DiagnosisPair = Tuple[str, Callable[[str], object]]
+DiagnosisPairs = Iterable[DiagnosisPair]
+DiagnosisDict = Dict[str, object]
+Diagnoses = Union[DiagnosisPairs, DiagnosisDict]
+
+
+# default diagnoses,
+# as a tuple of (name, diagnosis_func) pairs because python still has no frozendict!
+DFLT_DIAGNOSES = (
+    ('json_info', dflt_json_info_extractor),
+    ('pkg_diagnosis_result', run_pkg_diagnosis),
+    ('pkg_folder_diagnosis_result', run_folder_diagnosis),
+    ('test_diagnosis_result', run_pkg_tests),
+)
+
+
+def _resolve_diagnoses(diagnoses: Diagnoses) -> DiagnosisDict:
+    if not isinstance(diagnoses, Mapping):
+        if isinstance(diagnoses, str):
+            diagnoses = [diagnoses]
+
+        def resolve_string_diagnoses(diagnoses):
+            dflt_diagnosis_dict = dict(DFLT_DIAGNOSES)
+            for d in diagnoses:
+                if isinstance(d, str):
+                    name = d
+                    if name in dflt_diagnosis_dict:
+                        yield name, dflt_diagnosis_dict[name]
+                    else:
+                        raise ValueError(f"Unknown diagnosis name: {name}")
+                else:
+                    yield d  # assume it's a diagnosis pair
+
+        diagnoses = dict(resolve_string_diagnoses(diagnoses))
+
+    return diagnoses
+
+
+def diagnose_pkgs(
+    pkgs: Iterable[str], diagnoses: Union[Diagnoses, Iterable[str]] = DFLT_DIAGNOSES
+):
+    diagnoses = _resolve_diagnoses(diagnoses)
+    if isinstance(pkgs, str):
+        pkgs = pkgs.split()
+    d = {}
+    for pkg in pkgs:
+        d[pkg] = diagnose_pkg(pkg, diagnoses=diagnoses)
+    return d
+
+
+def generate_diagnoses(
+    pkg_name: str,
+    diagnoses: Diagnoses = DFLT_DIAGNOSES,
+    *,
+    error_logger: Callable = print,
+):
+    """Runs through the diagnoses and yields the results.
+
+    :param diagnoses: A dictionary of diagnoses
+    :param pkg_name: The name of the package to diagnose
+    :return: A generator of the results of the diagnoses
+
+    Really, just goes through all (name, diagnosis_func) pairs in the diagnoses and
+    applies the diagnosis_func to the pkg_name, yielding the (name, result) pairs.
+
+    Here's an example using simple functions applied to the string 'pipoke'
+    (but obviously, the intended use is to apply functions that actually analyze the
+    package bearing the name pkg_name):
+
+    >>> pkg_name = 'pipoke'
+    >>> diagnoses = {'length': len, 'first_letter': lambda x: x[0]}
+    >>> dict(generate_diagnoses(diagnoses, pkg_name))
+    {'length': 6, 'first_letter': 'p'}
+
+    """
+    diagnoses = dict(diagnoses)
+    for name, diagnosis in diagnoses.items():
+        try:
+            yield name, diagnosis(pkg_name)
+        except Exception as e:
+            error_logger(f"ERROR: {pkg_name=}, {name=}: {e}")
+
+
+import subprocess
+from contextlib import contextmanager
+
+
+@contextmanager
+def manage_installation(pkg_name, install_pkg_if_not_installed=True, *, verbose=True):
+    try:
+        pkg_was_in_environment = False
+        if install_pkg_if_not_installed:
+            pkg_was_in_environment = is_package_installed(pkg_name)
+
+            # Install the package if not in the environment
+            if not pkg_was_in_environment:
+                install_package(pkg_name, verbose=verbose)
+
+        yield pkg_was_in_environment
+
+    finally:
+        # Uninstall the package if it was installed in this process
+        if install_pkg_if_not_installed and not pkg_was_in_environment:
+            subprocess.run(
+                ['pip', 'uninstall', '-y', pkg_name], capture_output=not verbose
+            )
+
+
 def diagnose_pkg(
     pkg_name: str,
-    # virtual_env: str = DFLT_TEST_ENV,
-    # *,
-    # virtual_envs_dir: str = '',
-    # delete_created_virtual_env_when_done: bool = True,
+    diagnoses: Diagnoses = DFLT_DIAGNOSES,
+    *,
+    install_pkg_if_not_installed: bool = True,
+    error_logger: Callable = print,
+    verbose=True,
 ):
-    # Initialize the results with default values
-    pkg_was_in_environment = False
+    """Diagnose a package, given it's name
 
-    # virtual_env = virtualenv_path(virtual_env, virtual_envs_dir=virtual_envs_dir)
-    # virtual_env_existed = venv_virtualenv_exists(virtual_env)
+    :param pkg_name: The name of the package to diagnose
+    :param diagnoses: A dictionary of diagnoses (name and function pairs)
+    :param install_pkg_if_not_installed: Whether to install the package if it's not installed
+    :param error_logger: A function to log errors
+    """
 
-    # # Create the virtual environment if it doesn't exist
-    # virtual_env = create_virtualenv(virtual_env)
+    diagnoses = _resolve_diagnoses(diagnoses)
 
-    # Check if the package is already in the environment
-    pkg_was_in_environment = is_package_installed(pkg_name)
-
-    # Install the package if not in the environment
-    if not pkg_was_in_environment:
-        install_package(pkg_name)
-
-    d = dict()
-
-    try:
-        d['pkg_diagnosis_result'] = run_pkg_diagnosis(pkg_name)
-    except Exception as e:
-        print(f"ERROR: pkg_diagnosis_result: {e}")
-
-    try:
-        d['pkg_folder_diagnosis_result'] = run_folder_diagnosis(pkg_name)
-    except Exception as e:
-        print(f"ERROR: pkg_folder_diagnosis_result: {e}")
-
-    try:
-        d['test_diagnosis_result'] = run_pkg_tests(pkg_name)
-    except Exception as e:
-        print(f"ERROR: test_diagnosis_result: {e}")
-
-    try:
-        d['json_info'] = dflt_json_info_extractor(pkg_name)
-    except Exception as e:
-        print(f"ERROR: json_info: {e}")
-
-    # Uninstall the package if it was installed in this process
-    if not pkg_was_in_environment:
-        subprocess.run(['pip', 'uninstall', '-y', pkg_name])
-
-    # if delete_created_virtual_env_when_done and not virtual_env_existed:
-    #     # Delete the virtual environment if it was created in this process
-    #     print(f"DONE: Deleting virtual environment: {virtual_env}")
-    #     subprocess.run(['rm', '-rf', virtual_env])
+    with manage_installation(pkg_name, install_pkg_if_not_installed, verbose=verbose):
+        d = dict(generate_diagnoses(pkg_name, diagnoses, error_logger=error_logger))
 
     return d
 
 
-# def _run_diagnoses(pkg_name):
-#     d = {
-#         # 'pkg_was_in_environment': pkg_was_in_environment,
-#         'pkg_diagnosis_result': run_pkg_diagnosis(pkg_name),
-#         'pkg_folder_diagnosis_result': run_folder_diagnosis(pkg_name),
-#         'test_diagnosis_result': run_pkg_tests(pkg_name),
-#     }
+# def diagnose_pkg(
+#     pkg_name: str,
+#     diagnoses: Diagnoses = DFLT_DIAGNOSES,
+#     *,
+#     install_pkg_if_not_installed: bool = True,
+#     error_logger: Callable = print,
+# ):
+#     """Diagnose a package, given it's name
 
-#     return json.dumps(d, indent=2)
+#     :param pkg_name: The name of the package to diagnose
+#     :param diagnoses: A dictionary of diagnoses (name and function pairs)
+#     :param install_pkg_if_not_installed: Whether to install the package if it's not installed
+#     :param error_logger: A function to log errors
+#     """
 
+#     diagnoses = _resolve_diagnoses(diagnoses)
 
-# def run_script_in_virtualenv(script_path, virtual_env, *args):
-#     python_executable = os.path.join(virtual_env, 'bin', 'python')
-#     cmd = [python_executable, script_path] + list(args)
-#     result = subprocess.run(
-#         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
-#     )
-#     return result.stdout
+#     pkg_was_in_environment = False
+#     if install_pkg_if_not_installed:
+#         pkg_was_in_environment = is_package_installed(pkg_name)
 
+#         # Install the package if not in the environment
+#         if not pkg_was_in_environment:
+#             install_package(pkg_name)
 
-# def run_pkg_diagnosis(pkg_name, virtual_env=DFLT_TEST_ENV):
-#     # path to your standalone script for package diagnosis
-#     script_path = 'path/to/pkg_diagnosis_script.py'
-#     return run_script_in_virtualenv(script_path, virtual_env, pkg_name)
+#     d = dict(generate_diagnoses(pkg_name, diagnoses, error_logger=error_logger))
 
+#     # Uninstall the package if it was installed in this process
+#     if install_pkg_if_not_installed and not pkg_was_in_environment:
+#         subprocess.run(['pip', 'uninstall', '-y', pkg_name])
+
+#     return d
 
 # Extras for pyenv:
 
@@ -468,7 +544,7 @@ def get_pyenv_virtualenv_path(virtual_environment_name):
         # Handle the case where pyenv is not found
         return None
 
-
+import yp
 def main():
     import argparse
 
@@ -483,26 +559,28 @@ def main():
         help='The names of the packages to diagnose',
     )
     parser.add_argument(
-        '--virtual-env',
+        '--diagnoses',
         type=str,
-        default=DFLT_TEST_ENV,
-        help='The name of the virtual environment to use',
+        nargs='+',
+        help='The names of the diagnoses to run',
     )
     parser.add_argument(
-        '--virtual-envs-dir',
-        type=str,
-        default='',
-        help='The directory where virtual environments are stored',
+        '--install_pkg_if_not_installed',
+        type=bool,
+        default=True,
+        help='Whether to install the package if it is not installed',
     )
     parser.add_argument(
-        '--delete-created-virtual-env-when-done',
-        action='store_true',
-        help='Delete the virtual environment when done',
+        '--verbose',
+        type=bool,
+        default=True,
+        help='Whether to print verbose output',
     )
+
     args = parser.parse_args()
 
     # run diagnose_pkgs
-    d = diagnose_pkgs(args.packages)
+    d = diagnose_pkgs(args.packages, args.diagnoses)
 
     # print the results
     print(json.dumps(d, indent=2))
