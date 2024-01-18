@@ -653,7 +653,7 @@ def main():
             'filepath to a requirements file (any file whose lines are pip installable)'
         ),
     )
-    diagnoses_names = ', '.join(name for name, _ in diagnosis_funcs)
+    diagnoses_names = ', '.join(name for name, _ in diagnosis_funcs.items())
     parser.add_argument(
         '--diagnoses',
         type=str,
