@@ -558,11 +558,15 @@ def main():
         nargs='+',
         help='The names of the packages to diagnose',
     )
+    diagnoses_names = ', '.join(name for name, _ in DFLT_DIAGNOSES)
     parser.add_argument(
         '--diagnoses',
         type=str,
         nargs='+',
-        help='The names of the diagnoses to run',
+        help=(
+            f'The names of the diagnoses to run. Any combination of: {diagnoses_names}. '
+            'If not specified, all diagnoses will be run.'
+        )
     )
     parser.add_argument(
         '--install_pkg_if_not_installed',
