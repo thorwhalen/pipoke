@@ -348,12 +348,13 @@ def _resolve_diagnoses(diagnoses: Diagnoses) -> DiagnosisDict:
 def _resolve_packages(pkgs: Union[str, Iterable[str]]):
     """Resolve a string of packages or a filepath to a requirements file
     to a list of packages"""
+    cleanup = lambda pkgs: list(filter((x.strip() for x in pkgs)))
     if isinstance(pkgs, str):
         if os.path.isfile(pkgs):
             with open(pkgs) as f:
-                pkgs = f.readlines()
+                pkgs = cleanup(f.readlines())
         else:
-            pkgs = pkgs.split()
+            pkgs = cleanup(pkgs.split())
     return pkgs
 
 
@@ -386,6 +387,10 @@ def diagnose_pkgs(
     pkgs: Union[str, Iterable[str]],
     diagnoses: Union[Diagnoses, Iterable[str]] = DFLT_DIAGNOSES,
     store_factory: Union[str, Callable[[], Settable]] = dict,
+    *,
+    install_pkg_if_not_installed: bool = True,
+    error_logger: Callable = print,
+    verbose=True,
 ):
     """Diagnose a list of packages
 
@@ -402,7 +407,13 @@ def diagnose_pkgs(
         pkgs = pkgs.split()
     d = store_factory()
     for pkg in pkgs:
-        d[pkg] = diagnose_pkg(pkg, diagnoses=diagnoses)
+        d[pkg] = diagnose_pkg(
+            pkg,
+            diagnoses=diagnoses,
+            install_pkg_if_not_installed=install_pkg_if_not_installed,
+            error_logger=error_logger,
+            verbose=verbose,
+        )
     return d
 
 
@@ -479,7 +490,6 @@ def diagnose_pkg(
     :param install_pkg_if_not_installed: Whether to install the package if it's not installed
     :param error_logger: A function to log errors
     """
-
     diagnoses = _resolve_diagnoses(diagnoses)
 
     with manage_installation(pkg_name, install_pkg_if_not_installed, verbose=verbose):
