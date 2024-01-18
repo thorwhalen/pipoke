@@ -371,9 +371,9 @@ def _resolve_store_factory(store_factory: Union[str, Callable[[], Settable]]):
             store_factory = dict
         elif os.path.isdir(store_factory):
             dirpath = store_factory
-            from dol import JsonFiles
+            from dol import Jsons
 
-            store_factory = lambda: JsonFiles(dirpath)
+            store_factory = lambda: Jsons(dirpath)
         else:
             raise ValueError(
                 f"Unknown store factory (if it's a folder, it doesn't exist: "
