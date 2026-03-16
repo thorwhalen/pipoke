@@ -16,14 +16,12 @@ import pkg_resources
 import json
 from typing import (
     Union,
-    Iterable,
     Tuple,
-    Callable,
     Dict,
-    Mapping,
     Protocol,
     runtime_checkable,
 )
+from collections.abc import Iterable, Callable, Mapping
 
 
 def current_virtual_environment_path():
@@ -228,9 +226,8 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
             # Capture the output for analysis if needed
             result = subprocess.run(
                 cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True,
+                capture_output=True,
+                text=True,
             )
             # Analyze the pytest output, parse the results, and extract relevant information
             # Example: You can count the number of passed and failed tests from the output
@@ -305,9 +302,9 @@ def dflt_json_info_extractor(pkg_name):
     return d
 
 
-DiagnosisPair = Tuple[str, Callable[[str], object]]
+DiagnosisPair = tuple[str, Callable[[str], object]]
 DiagnosisPairs = Iterable[DiagnosisPair]
-DiagnosisDict = Dict[str, object]
+DiagnosisDict = dict[str, object]
 Diagnoses = Union[DiagnosisPairs, DiagnosisDict]
 
 
@@ -345,10 +342,10 @@ def _resolve_diagnoses(diagnoses: Diagnoses) -> DiagnosisDict:
     return diagnoses
 
 
-def _resolve_packages(pkgs: Union[str, Iterable[str]]):
+def _resolve_packages(pkgs: str | Iterable[str]):
     """Resolve a string of packages or a filepath to a requirements file
     to a list of packages"""
-    cleanup = lambda pkgs: list(filter((x.strip() for x in pkgs)))
+    cleanup = lambda pkgs: list(filter(x.strip() for x in pkgs))
     if isinstance(pkgs, str):
         if os.path.isfile(pkgs):
             with open(pkgs) as f:
@@ -366,7 +363,7 @@ class Settable(Protocol):
         """The method controlling self[k] = v"""
 
 
-def _resolve_store_factory(store_factory: Union[str, Callable[[], Settable]]):
+def _resolve_store_factory(store_factory: str | Callable[[], Settable]):
     if isinstance(store_factory, str):
         if store_factory == 'dict':
             store_factory = dict
@@ -384,9 +381,9 @@ def _resolve_store_factory(store_factory: Union[str, Callable[[], Settable]]):
 
 
 def diagnose_pkgs(
-    pkgs: Union[str, Iterable[str]],
-    diagnoses: Union[Diagnoses, Iterable[str]] = DFLT_DIAGNOSES,
-    store_factory: Union[str, Callable[[], Settable]] = dict,
+    pkgs: str | Iterable[str],
+    diagnoses: Diagnoses | Iterable[str] = DFLT_DIAGNOSES,
+    store_factory: str | Callable[[], Settable] = dict,
     *,
     install_pkg_if_not_installed: bool = True,
     error_logger: Callable = print,
@@ -537,7 +534,7 @@ def diagnose_pkg(
 def virtualenv_manager(
     virtual_env: str,
     virtual_envs_dir: str = '',  # empty string will have the effect of looking in the current directory
-) -> Union[str, None]:
+) -> str | None:
     """
     Check if a virtual environment was created using a specific manager,
     returning the name of the manager if found.
@@ -628,7 +625,7 @@ def get_pyenv_virtualenv_path(virtual_environment_name):
         # Run the pyenv virtualenv-prefix command and capture the output
         cmd = ['pyenv', 'virtualenv-prefix', virtual_environment_name]
         result = subprocess.run(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
+            cmd, capture_output=True, text=True
         )
 
         # Check if the command was successful and has output
