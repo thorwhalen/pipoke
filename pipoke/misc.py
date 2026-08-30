@@ -23,13 +23,21 @@ def second_party_names(module, obj_filt=None):
     :param obj_filt: Boolean function applied to object to filter it in
     :return:
 
-    >>> from tec import modules  # pip install tec
-    >>> sorted(second_party_names(modules))[:5]
-    ['DOTPATH', 'FILEPATH', 'FOLDERPATH', 'LOADED', 'ModuleSpecKind']
-    >>> sorted(second_party_names(modules, callable))[:5]
-    ['ModuleSpecKind', 'coerce_module_spec', 'get_imported_module_paths', 'is_from_module', 'is_module_dotpath']
-    >>> sorted(second_party_names(modules, lambda obj: isinstance(obj, type)))
-    ['ModuleSpecKind']
+    >>> import collections
+    >>> names = sorted(second_party_names(collections))
+    >>> 'ChainMap' in names and 'OrderedDict' in names
+    True
+
+    Names the module merely imports are excluded:
+
+    >>> 'abc' in names
+    False
+
+    ``obj_filt`` narrows the result further:
+
+    >>> classes = sorted(second_party_names(collections, lambda o: isinstance(o, type)))
+    >>> 'Counter' in classes and 'namedtuple' not in classes
+    True
     """
     obj_filt = obj_filt or (lambda x: x)
     for attr in filter(lambda a: not a.startswith('_'), dir(module)):
@@ -106,39 +114,6 @@ def subsequence_counts(n=2, n_of_top_counts=10):
     tt = [(''.join(x[0]), x[1]) for x in pkg_subseqs.most_common(n_of_top_counts)]
     return {'words': t, 'pkgs': tt}
 
-
-if __name__ == '__main__':
-    import argh
-    from functools import wraps
-
-    parser = argh.ArghParser()
-
-
-    def mk_postproc_deco(postproc_func, func_rename=None):
-        def decorator(func):
-            @wraps(func)
-            def wrapped_func(*args, **kwargs):
-                return postproc_func(func(*args, **kwargs))
-
-            if func_rename is not None:
-                wrapped_func.__name__ = func_rename(func)
-            return wrapped_func
-
-        return decorator
-
-
-    column_disp = mk_postproc_deco(lambda x: '\n'.join(x))
-    counts = mk_postproc_deco(lambda x: '\n'.join(x))
-
-    funcs = []
-    funcs += list(map(column_disp,
-                      [words_containing_py_free_for_pkg,
-                       words_starting_with_py_free_for_pkg,
-                       words_ending_with_py_free_for_pkg]))
-    funcs += [multiple_word_vs_pkgs_regex_stats, subsequence_counts]
-
-    parser.add_commands([words_and_pkg_names_satisfying_regex, is_not_a_pkg_name, allwords, pkgnames])
-    parser.dispatch()
 
 # print(multiple_word_vs_pkgs_regex_stats({'contains "py"': '.*py.*',
 #                                          'starts with py': 'py.*$',
