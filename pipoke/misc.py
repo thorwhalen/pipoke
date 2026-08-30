@@ -107,39 +107,6 @@ def subsequence_counts(n=2, n_of_top_counts=10):
     return {'words': t, 'pkgs': tt}
 
 
-if __name__ == '__main__':
-    import argh
-    from functools import wraps
-
-    parser = argh.ArghParser()
-
-
-    def mk_postproc_deco(postproc_func, func_rename=None):
-        def decorator(func):
-            @wraps(func)
-            def wrapped_func(*args, **kwargs):
-                return postproc_func(func(*args, **kwargs))
-
-            if func_rename is not None:
-                wrapped_func.__name__ = func_rename(func)
-            return wrapped_func
-
-        return decorator
-
-
-    column_disp = mk_postproc_deco(lambda x: '\n'.join(x))
-    counts = mk_postproc_deco(lambda x: '\n'.join(x))
-
-    funcs = []
-    funcs += list(map(column_disp,
-                      [words_containing_py_free_for_pkg,
-                       words_starting_with_py_free_for_pkg,
-                       words_ending_with_py_free_for_pkg]))
-    funcs += [multiple_word_vs_pkgs_regex_stats, subsequence_counts]
-
-    parser.add_commands([words_and_pkg_names_satisfying_regex, is_not_a_pkg_name, allwords, pkgnames])
-    parser.dispatch()
-
 # print(multiple_word_vs_pkgs_regex_stats({'contains "py"': '.*py.*',
 #                                          'starts with py': 'py.*$',
 #                                          'ends with py': '.*py$'

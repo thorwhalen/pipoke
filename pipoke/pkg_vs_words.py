@@ -152,20 +152,3 @@ def is_not_a_pkg_name(regex='.*', words=None):
     if isinstance(words, str):
         words = set(map(lambda w: w.strip(), words.split(',')))
     return set(filter(re.compile(regex).match, words)).difference(pkg_names)
-
-
-if __name__ == '__main__':
-    import argh
-
-    parser = argh.ArghParser()
-
-    def allwords():
-        return all_words
-
-    def pkgnames():
-        return pkg_names
-
-    parser.add_commands(
-        [words_and_pkg_names_satisfying_regex, is_not_a_pkg_name, allwords, pkgnames]
-    )
-    parser.dispatch()
