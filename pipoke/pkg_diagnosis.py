@@ -435,7 +435,7 @@ def generate_diagnoses(
 
     >>> pkg_name = 'pipoke'
     >>> diagnoses = {'length': len, 'first_letter': lambda x: x[0]}
-    >>> dict(generate_diagnoses(diagnoses, pkg_name))
+    >>> dict(generate_diagnoses(pkg_name, diagnoses))
     {'length': 6, 'first_letter': 'p'}
 
     """

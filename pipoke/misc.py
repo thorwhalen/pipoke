@@ -23,13 +23,21 @@ def second_party_names(module, obj_filt=None):
     :param obj_filt: Boolean function applied to object to filter it in
     :return:
 
-    >>> from tec import modules  # pip install tec
-    >>> sorted(second_party_names(modules))[:5]
-    ['DOTPATH', 'FILEPATH', 'FOLDERPATH', 'LOADED', 'ModuleSpecKind']
-    >>> sorted(second_party_names(modules, callable))[:5]
-    ['ModuleSpecKind', 'coerce_module_spec', 'get_imported_module_paths', 'is_from_module', 'is_module_dotpath']
-    >>> sorted(second_party_names(modules, lambda obj: isinstance(obj, type)))
-    ['ModuleSpecKind']
+    >>> import collections
+    >>> names = sorted(second_party_names(collections))
+    >>> 'ChainMap' in names and 'OrderedDict' in names
+    True
+
+    Names the module merely imports are excluded:
+
+    >>> 'abc' in names
+    False
+
+    ``obj_filt`` narrows the result further:
+
+    >>> classes = sorted(second_party_names(collections, lambda o: isinstance(o, type)))
+    >>> 'Counter' in classes and 'namedtuple' not in classes
+    True
     """
     obj_filt = obj_filt or (lambda x: x)
     for attr in filter(lambda a: not a.startswith('_'), dir(module)):
