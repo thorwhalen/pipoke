@@ -12,7 +12,7 @@ diagnose_pkgs.py (or the shell script diagnose-pkgs).
 import os
 import sys
 import subprocess
-import pkg_resources
+import importlib.metadata as pkg_metadata
 import json
 from typing import (
     Union,
@@ -121,9 +121,9 @@ def is_package_installed(pkg_name):
     Check if a package is installed in the virtual environment.
     """
     try:
-        pkg_resources.get_distribution(pkg_name)
+        pkg_metadata.distribution(pkg_name)
         return True
-    except pkg_resources.DistributionNotFound:
+    except pkg_metadata.PackageNotFoundError:
         return False
 
 
@@ -167,12 +167,11 @@ def run_folder_diagnosis(pkg_name, folder_diagnosis=dflt_folder_diagnosis):
     Run a diagnosis function on the folder containing the package's code folder.
     """
     try:
-        pkg_info = pkg_resources.get_distribution(pkg_name)
-        pkg_location = pkg_info.location
+        pkg_location = str(pkg_metadata.distribution(pkg_name).locate_file(''))
         pkg_folder = os.path.join(pkg_location, pkg_name.replace('-', '_'))
 
         return folder_diagnosis(pkg_folder)
-    except pkg_resources.DistributionNotFound:
+    except pkg_metadata.PackageNotFoundError:
         print(f"ERROR: Package not found: {pkg_name}")
         return None
 
@@ -188,8 +187,7 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
     import unittest
 
     try:
-        pkg_info = pkg_resources.get_distribution(pkg_name)
-        pkg_location = pkg_info.location
+        pkg_location = str(pkg_metadata.distribution(pkg_name).locate_file(''))
         pkg_folder = os.path.join(pkg_location, pkg_name.replace('-', '_'))
 
         test_diagnoses = {}
@@ -246,7 +244,7 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
 
         return test_diagnoses
 
-    except pkg_resources.DistributionNotFound:
+    except pkg_metadata.PackageNotFoundError:
         return None
 
 
