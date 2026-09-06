@@ -23,6 +23,8 @@ from typing import (
 )
 from collections.abc import Iterable, Callable, Mapping
 
+from packaging.requirements import Requirement
+
 
 def current_virtual_environment_path():
     """
@@ -116,12 +118,51 @@ def install_package(pkg_name, virtual_env=DFLT_TEST_ENV, *, verbose=True):
         pass
 
 
+def _distribution_name(pkg_name: str) -> str:
+    """The bare distribution name of a pip-installable requirement string.
+
+    ``importlib.metadata`` looks distributions up by literal (normalized) name,
+    whereas the ``pkg_resources`` API it replaced parsed its argument as a
+    PEP 508 requirement. Callers rely on the latter -- ``diagnose_pkgs`` and the
+    ``diagnose-pkg`` CLI both document a requirements file as valid input -- so
+    the requirement is parsed here, before the lookup.
+
+    >>> _distribution_name('pipoke')
+    'pipoke'
+    >>> _distribution_name('  pipoke >= 0.0.1  ')
+    'pipoke'
+    >>> _distribution_name('pipoke[extra] ; python_version > "3"')
+    'pipoke'
+
+    Malformed input raises ``InvalidRequirement`` (a ``ValueError``), as it did
+    before.
+    """
+    return Requirement(pkg_name.strip()).name
+
+
+def _pkg_folder(pkg_name: str) -> str:
+    """The folder holding the code of the installed package named by ``pkg_name``.
+
+    Raises ``pkg_metadata.PackageNotFoundError`` if no matching distribution is
+    installed.
+    """
+    dist_name = _distribution_name(pkg_name)
+    dist_location = pkg_metadata.distribution(dist_name).locate_file('')
+    # realpath: the metadata API can hand back a path relative to a relative
+    # sys.path entry (the cwd, notably), and this value is passed on to os.walk,
+    # to unittest discovery, and to a pytest subprocess.
+    return os.path.join(os.path.realpath(dist_location), dist_name.replace('-', '_'))
+
+
 def is_package_installed(pkg_name):
     """
     Check if a package is installed in the virtual environment.
+
+    ``pkg_name`` can be a bare distribution name or any pip-installable
+    requirement string (version specifier, extras, environment markers).
     """
     try:
-        pkg_metadata.distribution(pkg_name)
+        pkg_metadata.distribution(_distribution_name(pkg_name))
         return True
     except pkg_metadata.PackageNotFoundError:
         return False
@@ -167,10 +208,7 @@ def run_folder_diagnosis(pkg_name, folder_diagnosis=dflt_folder_diagnosis):
     Run a diagnosis function on the folder containing the package's code folder.
     """
     try:
-        pkg_location = str(pkg_metadata.distribution(pkg_name).locate_file(''))
-        pkg_folder = os.path.join(pkg_location, pkg_name.replace('-', '_'))
-
-        return folder_diagnosis(pkg_folder)
+        return folder_diagnosis(_pkg_folder(pkg_name))
     except pkg_metadata.PackageNotFoundError:
         print(f"ERROR: Package not found: {pkg_name}")
         return None
@@ -187,8 +225,7 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
     import unittest
 
     try:
-        pkg_location = str(pkg_metadata.distribution(pkg_name).locate_file(''))
-        pkg_folder = os.path.join(pkg_location, pkg_name.replace('-', '_'))
+        pkg_folder = _pkg_folder(pkg_name)
 
         test_diagnoses = {}
 
