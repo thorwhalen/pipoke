@@ -292,10 +292,16 @@ URL_PATTERN = 'https://pypi.python.org/pypi/{package}/json'
 def json_package_info(package, url_pattern=URL_PATTERN):
     """Return version of package on pypi.python.org using json.
 
-    >>> d = json_package_info('ps')
-    >>> isinstance(d, dict)
+    Makes a real HTTPS request to PyPI, so this example is illustrative only
+    and is skipped by the doctest runner (pipoke#6): a PyPI outage or a
+    network-restricted CI runner must not fail the test suite. See
+    ``pipoke.tests.test_pkg_diagnosis.test_json_package_info`` for a
+    network-free, mocked equivalent.
+
+    >>> d = json_package_info('ps')  # doctest: +SKIP
+    >>> isinstance(d, dict)  # doctest: +SKIP
     True
-    >>> {'name', 'author', 'version'}.issubset(d['info'])
+    >>> {'name', 'author', 'version'}.issubset(d['info'])  # doctest: +SKIP
     True
 
     """
