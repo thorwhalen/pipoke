@@ -22,6 +22,7 @@ import importlib
 import os
 import pkgutil
 from pathlib import Path
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -29,6 +30,7 @@ import pipoke
 from pipoke.pkg_diagnosis import (
     _pkg_folder,
     is_package_installed,
+    json_package_info,
     run_folder_diagnosis,
     run_pkg_tests,
 )
@@ -156,3 +158,28 @@ def test_run_folder_diagnosis_of_missing_package():
 
 def test_run_pkg_tests_of_missing_package():
     assert run_pkg_tests(A_MISSING_PKG) is None
+
+
+def test_json_package_info():
+    """Network-free equivalent of the (doctest: +SKIP'd) module docstring example.
+
+    Guards pipoke#6: the real doctest hits PyPI over HTTPS, which must never
+    gate CI. This mocks ``requests.get`` so the same contract -- a dict with
+    an ``info`` sub-dict carrying ``name``/``author``/``version`` -- is
+    checked without the network dependency.
+    """
+    fake_payload = {
+        'info': {'name': 'ps', 'author': 'someone', 'version': '1.0'},
+    }
+    fake_response = Mock(status_code=200, **{'json.return_value': fake_payload})
+    with patch('requests.get', return_value=fake_response) as mocked_get:
+        d = json_package_info('ps')
+    mocked_get.assert_called_once()
+    assert isinstance(d, dict)
+    assert {'name', 'author', 'version'}.issubset(d['info'])
+
+
+def test_json_package_info_returns_empty_dict_on_non_ok_status():
+    fake_response = Mock(status_code=404)
+    with patch('requests.get', return_value=fake_response):
+        assert json_package_info('a-package-that-does-not-exist-xyz') == {}
