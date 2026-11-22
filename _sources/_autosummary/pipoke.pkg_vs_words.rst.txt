@@ -1,0 +1,19 @@
+pipoke.pkg\_vs\_words
+=====================
+
+.. automodule:: pipoke.pkg_vs_words
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      disp_str_for_counts
+      get_all_words_from_wordnet
+      is_not_a_pkg_name
+      is_standard_lib_path
+      standard_lib_module_names
+      str_for_func
+      words_and_pkg_names_satisfying_condition
+      words_and_pkg_names_satisfying_regex
+   

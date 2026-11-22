@@ -1,0 +1,535 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="pipoke.distribution.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+<link rel="alternate" type="text/markdown" href="pipoke.distribution.html.md">
+<link rel="describedby" href="llms.txt"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="pipoke.misc" href="pipoke.misc.html"><link rel="prev" title="pipoke" href="pipoke.html">
+
+    <!-- Generated with Sphinx 9.1.1 and Furo 2025.12.19 -->
+        <title>pipoke.distribution - pipoke</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  --color-brand-primary: #00658d;
+  --color-brand-content: #00658d;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3ec9f5;
+  --color-brand-content: #3ec9f5;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3ec9f5;
+  --color-brand-content: #3ec9f5;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">pipoke</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">pipoke</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../api.html">API reference</a><input aria-label="Toggle navigation of API reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="pipoke.html">pipoke</a><input aria-label="Toggle navigation of pipoke" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">pipoke.distribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipoke.misc.html">pipoke.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipoke.pkg_diagnosis.html">pipoke.pkg_diagnosis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipoke.pkg_vs_words.html">pipoke.pkg_vs_words</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipoke.pypi_store.html">pipoke.pypi_store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipoke.word_conditions.html">pipoke.word_conditions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/_autosummary/pipoke.distribution.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-pipoke.distribution">
+<span id="pipoke-distribution"></span><h1>pipoke.distribution<a class="headerlink" href="#module-pipoke.distribution" title="Link to this heading">¶</a></h1>
+<p>Tools to run on PyPi distribution of packages.</p>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pipoke.distribution.ensure_json_package_info" title="pipoke.distribution.ensure_json_package_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_json_package_info</span></code></a>(package_info)</p></td>
+<td><p>Gets and validates package info dicts from various sources.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pipoke.distribution.format_str_vals_of_dict" title="pipoke.distribution.format_str_vals_of_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_str_vals_of_dict</span></code></a>(d, *[, ...])</p></td>
+<td><p>Traverse the values of a dict and apply string formatting to them, recursively.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pipoke.distribution.get_version" title="pipoke.distribution.get_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_version</span></code></a>(package[, url_pattern])</p></td>
+<td><p>Return version of package on pypi.python.org using json.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">increment_version</span></code>(version_str)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pipoke.distribution.json_package_info" title="pipoke.distribution.json_package_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">json_package_info</span></code></a>(package[, url_pattern])</p></td>
+<td><p>Return version of package on pypi.python.org using json.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_release_date</span></code>(package)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_setup</span></code>(**setup_kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pipoke.distribution.package_info" title="pipoke.distribution.package_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">package_info</span></code></a>(package[, url_pattern])</p></td>
+<td><p>Return version of package on pypi.python.org using json.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">release_dates</span></code>(package)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">release_versions</span></code>(package)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pipoke.distribution.ujoin" title="pipoke.distribution.ujoin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ujoin</span></code></a>(*args)</p></td>
+<td><p>Join strings with the url seperator (/).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pipoke.distribution.PartialFormatter" title="pipoke.distribution.PartialFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PartialFormatter</span></code></a>()</p></td>
+<td><p>A string formatter that won't complain if the fields are only partially formatted.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="pipoke.distribution.PartialFormatter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pipoke.distribution.</span></span><span class="sig-name descname"><span class="pre">PartialFormatter</span></span><a class="reference internal" href="../_modules/pipoke/distribution.html#PartialFormatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipoke.distribution.PartialFormatter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/string.html#string.Formatter" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Formatter</span></code></a></p>
+<p>A string formatter that won’t complain if the fields are only partially formatted.
+But note that you will lose the spec part of your template (e.g. in {foo:1.2f},
+you’ll loose the 1.2f if not foo is given – but {foo} will remain).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipoke.distribution.ensure_json_package_info">
+<span class="sig-prename descclassname"><span class="pre">pipoke.distribution.</span></span><span class="sig-name descname"><span class="pre">ensure_json_package_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipoke/distribution.html#ensure_json_package_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipoke.distribution.ensure_json_package_info" title="Link to this definition">¶</a></dt>
+<dd><p>Gets and validates package info dicts from various sources.</p>
+<p>Namely, this is used in functions like <code class="docutils literal notranslate"><span class="pre">releases</span></code>, <code class="docutils literal notranslate"><span class="pre">release_dates</span></code> etc. so
+that we can use them bother as fetcher+parser and as  parsers (giving them the
+same info dict we already fetched, so we don’t have to fetch the info twice).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipoke.distribution.format_str_vals_of_dict">
+<span class="sig-prename descclassname"><span class="pre">pipoke.distribution.</span></span><span class="sig-name descname"><span class="pre">format_str_vals_of_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_formatting_loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipoke/distribution.html#format_str_vals_of_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipoke.distribution.format_str_vals_of_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Traverse the values of a dict and apply string formatting to them, recursively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> – The template dict containing both format strings to be populated/embodied
+and (possibly) values to do so.</p></li>
+<li><p><strong>max_formatting_loops</strong> – The maximum number of loops.</p></li>
+<li><p><strong>kwargs</strong> – Extra values to use to populate string formats</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A (shallow) copy of the filled out (i.e. populated/embodied) dict</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">'filepath'</span><span class="p">:</span> <span class="s1">'</span><span class="si">{root}</span><span class="s1">/</span><span class="si">{file}</span><span class="s1">.</span><span class="si">{ext}</span><span class="s1">'</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">'ext'</span><span class="p">:</span> <span class="s1">'txt'</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">format_str_vals_of_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">'ROOT'</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s1">'FILE'</span><span class="p">)</span>
+<span class="go">{'filepath': 'ROOT/FILE.txt', 'ext': 'txt'}</span>
+</pre></div>
+</div>
+<p>Note that if the input mapping <code class="code docutils literal notranslate"><span class="pre">d</span></code> and the kwargs have a conflict, the mapping
+version is used!</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">format_str_vals_of_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">'ROOT'</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s1">'FILE'</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s1">'will_not_be_used'</span><span class="p">)</span>
+<span class="go">{'filepath': 'ROOT/FILE.txt', 'ext': 'txt'}</span>
+</pre></div>
+</div>
+<p>But if you want to override an input mapping, you can – the usual way:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">format_str_vals_of_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s1">'will_be_used'</span><span class="p">),</span> <span class="n">root</span><span class="o">=</span><span class="s1">'ROOT'</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s1">'FILE'</span><span class="p">)</span>
+<span class="go">{'filepath': 'ROOT/FILE.will_be_used', 'ext': 'will_be_used'}</span>
+</pre></div>
+</div>
+<p>If you don’t provide enough fields to satisfy all the format fields in the values
+of <code class="docutils literal notranslate"><span class="pre">d</span></code>, you’ll be told to bugger off.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">format_str_vals_of_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">'ROOT'</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">I won't be able to complete that. You'll need to provide the values for:</span>
+<span class="x">  file</span>
+</pre></div>
+</div>
+<p>And it’s recursive…</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">'filepath'</span><span class="p">:</span> <span class="s1">'</span><span class="si">{root}</span><span class="s1">/</span><span class="si">{filename}</span><span class="s1">'</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">'filename'</span><span class="p">:</span> <span class="s1">'</span><span class="si">{file}</span><span class="s1">.</span><span class="si">{ext}</span><span class="s1">'</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_configs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'root'</span><span class="p">:</span> <span class="s1">'ROOT'</span><span class="p">,</span> <span class="s1">'file'</span><span class="p">:</span> <span class="s1">'FILE'</span><span class="p">,</span> <span class="s1">'ext'</span><span class="p">:</span> <span class="s1">'EXT'</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">format_str_vals_of_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">my_configs</span><span class="p">)</span>
+<span class="go">{'filepath': 'ROOT/FILE.EXT', 'filename': 'FILE.EXT'}</span>
+</pre></div>
+</div>
+<p># TODO: Could make the above work if filename is give, but not file nor ext!
+#  At least as an option.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipoke.distribution.get_version">
+<span class="sig-prename descclassname"><span class="pre">pipoke.distribution.</span></span><span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://pypi.python.org/pypi/{package}/json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipoke/distribution.html#get_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipoke.distribution.get_version" title="Link to this definition">¶</a></dt>
+<dd><p>Return version of package on pypi.python.org using json.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_version</span><span class="p">(</span><span class="s1">'py2store'</span><span class="p">)</span>
+<span class="go">'0.1.15'</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipoke.distribution.json_package_info">
+<span class="sig-prename descclassname"><span class="pre">pipoke.distribution.</span></span><span class="sig-name descname"><span class="pre">json_package_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://pypi.python.org/pypi/{package}/json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipoke/distribution.html#json_package_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipoke.distribution.json_package_info" title="Link to this definition">¶</a></dt>
+<dd><p>Return version of package on pypi.python.org using json.</p>
+<p>Makes a real HTTPS request to PyPI, so this example is illustrative only
+and is skipped by the doctest runner (pipoke#6): a PyPI outage or a
+network-restricted CI runner must not fail the test suite. See
+<code class="docutils literal notranslate"><span class="pre">pipoke.tests.test_distribution.test_json_package_info</span></code> for a
+network-free, mocked equivalent.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">json_package_info</span><span class="p">(</span><span class="s1">'ps'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'author'</span><span class="p">,</span> <span class="s1">'version'</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">'info'</span><span class="p">])</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipoke.distribution.package_info">
+<span class="sig-prename descclassname"><span class="pre">pipoke.distribution.</span></span><span class="sig-name descname"><span class="pre">package_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://pypi.python.org/pypi/{package}/json'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pipoke.distribution.package_info" title="Link to this definition">¶</a></dt>
+<dd><p>Return version of package on pypi.python.org using json.</p>
+<p>Makes a real HTTPS request to PyPI, so this example is illustrative only
+and is skipped by the doctest runner (pipoke#6): a PyPI outage or a
+network-restricted CI runner must not fail the test suite. See
+<code class="docutils literal notranslate"><span class="pre">pipoke.tests.test_distribution.test_json_package_info</span></code> for a
+network-free, mocked equivalent.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">json_package_info</span><span class="p">(</span><span class="s1">'ps'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'author'</span><span class="p">,</span> <span class="s1">'version'</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">'info'</span><span class="p">])</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipoke.distribution.ujoin">
+<span class="sig-prename descclassname"><span class="pre">pipoke.distribution.</span></span><span class="sig-name descname"><span class="pre">ujoin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipoke/distribution.html#ujoin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipoke.distribution.ujoin" title="Link to this definition">¶</a></dt>
+<dd><p>Join strings with the url seperator (/).</p>
+<p>Note that will add a / where it’s missing (as in between ‘<a class="reference external" href="https://pypi.org">https://pypi.org</a>’ and ‘project/’),
+and only use one if two consecutive tokens use respectively end and start with a /
+(as in ‘project/’ and ‘/pipoke/’).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ujoin</span><span class="p">(</span><span class="s1">'https://pypi.org'</span><span class="p">,</span> <span class="s1">'project/'</span><span class="p">,</span> <span class="s1">'/pipoke/'</span><span class="p">)</span>
+<span class="go">'https://pypi.org/project/pipoke/'</span>
+</pre></div>
+</div>
+<p>Extremal cases</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ujoin</span><span class="p">(</span><span class="s1">'https://pypi.org'</span><span class="p">)</span>
+<span class="go">'https://pypi.org'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ujoin</span><span class="p">(</span><span class="s1">'https://pypi.org/'</span><span class="p">)</span>
+<span class="go">'https://pypi.org/'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ujoin</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+<span class="go">''</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ujoin</span><span class="p">()</span>
+<span class="go">''</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="pipoke.misc.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">pipoke.misc</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="pipoke.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">pipoke</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">pipoke.distribution</a><ul>
+<li><a class="reference internal" href="#pipoke.distribution.PartialFormatter"><code class="docutils literal notranslate"><span class="pre">PartialFormatter</span></code></a></li>
+<li><a class="reference internal" href="#pipoke.distribution.ensure_json_package_info"><code class="docutils literal notranslate"><span class="pre">ensure_json_package_info()</span></code></a></li>
+<li><a class="reference internal" href="#pipoke.distribution.format_str_vals_of_dict"><code class="docutils literal notranslate"><span class="pre">format_str_vals_of_dict()</span></code></a></li>
+<li><a class="reference internal" href="#pipoke.distribution.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li><a class="reference internal" href="#pipoke.distribution.json_package_info"><code class="docutils literal notranslate"><span class="pre">json_package_info()</span></code></a></li>
+<li><a class="reference internal" href="#pipoke.distribution.package_info"><code class="docutils literal notranslate"><span class="pre">package_info()</span></code></a></li>
+<li><a class="reference internal" href="#pipoke.distribution.ujoin"><code class="docutils literal notranslate"><span class="pre">ujoin()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=5cf12315"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    </body>
+</html>

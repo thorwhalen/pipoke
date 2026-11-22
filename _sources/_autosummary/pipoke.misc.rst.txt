@@ -1,0 +1,19 @@
+pipoke.misc
+===========
+
+.. automodule:: pipoke.misc
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      is_from_module
+      multiple_word_vs_pkgs_regex_stats
+      second_party_names
+      subsequence_counts
+      word_vs_pkgs_regex_stats
+      words_containing_py_free_for_pkg
+      words_ending_with_py_free_for_pkg
+      words_starting_with_py_free_for_pkg
+   

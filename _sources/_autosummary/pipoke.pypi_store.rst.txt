@@ -1,0 +1,6 @@
+pipoke.pypi\_store
+==================
+
+.. automodule:: pipoke.pypi_store
+
+   

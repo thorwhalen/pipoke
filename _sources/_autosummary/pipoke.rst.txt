@@ -1,0 +1,29 @@
+﻿pipoke
+======
+
+.. automodule:: pipoke
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      words_and_pkg_names_satisfying_condition
+      words_and_pkg_names_satisfying_regex
+      is_not_a_pkg_name
+      refresh_saved_pkg_name_stub
+      info_of_pkg_from_web
+      get_version
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   distribution
+   misc
+   pkg_diagnosis
+   pkg_vs_words
+   pypi_store
+   word_conditions

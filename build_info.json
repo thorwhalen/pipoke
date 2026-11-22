@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-11-22T17:31:00Z",
+  "package": {
+    "name": "pipoke",
+    "version": "0.0.23",
+    "display_name": "pipoke",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "5038476f52cb57a9dd65cb5ea84b090d6c18d531",
+    "short_commit": "5038476",
+    "branch": "master",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/thorwhalen/pipoke",
+    "commit_url": "https://github.com/thorwhalen/pipoke/commit/5038476f52cb57a9dd65cb5ea84b090d6c18d531",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "thorwhalen/pipoke",
+    "sha": "5038476f52cb57a9dd65cb5ea84b090d6c18d531",
+    "sha_in_history": true,
+    "ref": "refs/heads/master",
+    "ref_name": "master",
+    "run_id": "45049729837",
+    "run_url": "https://github.com/thorwhalen/pipoke/actions/runs/45049729837",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.23",
+    "sphinx": "9.1.1",
+    "docutils": "0.22.4",
+    "python": "3.12.16"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "furo",
+    "accent": "#00658d",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 7,
+    "objects_documented": 37
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.0.23",
+    "relation": "same",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/thorwhalen/pipoke && cd pipoke\ngit checkout 5038476f52cb57a9dd65cb5ea84b090d6c18d531\npip install \"epythet==0.2.23\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": true,
+    "notes": []
+  }
+}

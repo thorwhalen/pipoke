@@ -1,0 +1,28 @@
+pipoke.distribution
+===================
+
+.. automodule:: pipoke.distribution
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ensure_json_package_info
+      format_str_vals_of_dict
+      get_version
+      increment_version
+      json_package_info
+      last_release_date
+      my_setup
+      package_info
+      release_dates
+      release_versions
+      ujoin
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PartialFormatter
+   

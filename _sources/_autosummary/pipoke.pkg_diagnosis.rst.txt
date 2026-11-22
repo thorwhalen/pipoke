@@ -1,0 +1,42 @@
+pipoke.pkg\_diagnosis
+=====================
+
+.. automodule:: pipoke.pkg_diagnosis
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      activate_virtualenv
+      activate_virtualenv_with_pyenv
+      create_virtualenv
+      create_virtualenv_with_pyenv
+      current_virtual_environment_path
+      dflt_folder_diagnosis
+      dflt_json_info_extractor
+      dflt_pkg_diagnosis
+      diagnose_pkg
+      diagnose_pkgs
+      fullpath
+      generate_diagnoses
+      get_pyenv_virtualenv_path
+      install_package
+      is_package_installed
+      json_package_info
+      main
+      manage_installation
+      pyenv_exists
+      run_folder_diagnosis
+      run_pkg_diagnosis
+      run_pkg_tests
+      venv_virtualenv_exists
+      virtualenv_manager
+      virtualenv_path
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Settable
+   

@@ -1,0 +1,14 @@
+pipoke.word\_conditions
+=======================
+
+.. automodule:: pipoke.word_conditions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      contains_py
+      ends_with_py
+      starts_with_py
+   

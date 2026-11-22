@@ -1,0 +1,25 @@
+# pipoke
+
+> Utils to acquire stuff from pypi and interrogate it
+
+
+## Pages
+
+- [What’s this?](index.html.md): Some tools to get data from pypi and kick it around, for fun and profit.
+- [API reference](api.html.md): | &#96;pipoke&#96;   | pipoke   |
+- [pipoke](_autosummary/pipoke.html.md): | &#96;words_and_pkg_names_satisfying_condition&#96;(cond)                                             |    ...
+- [pipoke.distribution](_autosummary/pipoke.distribution.html.md): Tools to run on PyPi distribution of packages.
+- [pipoke.misc](_autosummary/pipoke.misc.html.md): Miscellaneous helpers for relating python objects to modules and package names.
+- [pipoke.pkg_diagnosis](_autosummary/pipoke.pkg_diagnosis.html.md): Pip installed package diagnosis
+- [pipoke.pkg_vs_words](_autosummary/pipoke.pkg_vs_words.html.md): Compare package names with words (e.g. which package names are also dictionary words).
+- [pipoke.pypi_store](_autosummary/pipoke.pypi_store.html.md): A mapping view to pypi projects
+- [pipoke.word_conditions](_autosummary/pipoke.word_conditions.html.md): Small predicates on words, used to characterize package names.
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-11-22 17:31 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+
+## Optional
+
+- [pipoke.md](pipoke.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

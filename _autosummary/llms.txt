@@ -1,0 +1,18 @@
+# pipoke
+
+> Utils to acquire stuff from pypi and interrogate it
+
+
+## Pages in this subsection
+
+- [pipoke](pipoke.html.md): | &#96;words_and_pkg_names_satisfying_condition&#96;(cond)                                             |    ...
+- [pipoke.distribution](pipoke.distribution.html.md): Tools to run on PyPi distribution of packages.
+- [pipoke.misc](pipoke.misc.html.md): Miscellaneous helpers for relating python objects to modules and package names.
+- [pipoke.pkg_diagnosis](pipoke.pkg_diagnosis.html.md): Pip installed package diagnosis
+- [pipoke.pkg_vs_words](pipoke.pkg_vs_words.html.md): Compare package names with words (e.g. which package names are also dictionary words).
+- [pipoke.pypi_store](pipoke.pypi_store.html.md): A mapping view to pypi projects
+- [pipoke.word_conditions](pipoke.word_conditions.html.md): Small predicates on words, used to characterize package names.
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.
