@@ -1,3 +1,4 @@
+"""Miscellaneous helpers for relating python objects to modules and package names."""
 # print('\n'.join(is_not_a_pkg_name('^.+py.+$')))
 # print(is_not_a_pkg_name('.*py$'))
 

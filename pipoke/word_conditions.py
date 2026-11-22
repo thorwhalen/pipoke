@@ -1,3 +1,4 @@
+"""Small predicates on words, used to characterize package names."""
 def contains_py(w):
     return 'py' in w
 
