@@ -1,3 +1,4 @@
+"""Compare package names with words (e.g. which package names are also dictionary words)."""
 import inspect
 import re
 import pickle
