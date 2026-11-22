@@ -1,20 +1,21 @@
 """Tools to run on PyPi distribution of packages."""
+
 from string import Formatter
 
 dflt_formatter = Formatter()
 
 
 def increment_version(version_str):
-    version_nums = list(map(int, version_str.split('.')))
+    version_nums = list(map(int, version_str.split(".")))
     version_nums[-1] += 1
-    return '.'.join(map(str, version_nums))
+    return ".".join(map(str, version_nums))
 
 
 import requests
 import json
 from packaging.version import parse
 
-URL_PATTERN = 'https://pypi.python.org/pypi/{package}/json'
+URL_PATTERN = "https://pypi.python.org/pypi/{package}/json"
 
 
 # TODO: Use yb or merge functionality there if missing for json_package_info and
@@ -61,9 +62,9 @@ def ensure_json_package_info(package_info):
     if isinstance(package_info, str):
         package_name = package_info
         package_info = json_package_info(package_name)
-    assert _is_package_info_dict(
-        package_info
-    ), f'Not a valid package_info_ dict: {package_info}'
+    assert _is_package_info_dict(package_info), (
+        f"Not a valid package_info_ dict: {package_info}"
+    )
     return package_info
 
 
@@ -74,7 +75,7 @@ def release_versions(package):
 
 def release_dates(package):
     d = ensure_json_package_info(package)
-    return [dd[-1]['upload_time'] for dd in d['releases'].values()]
+    return [dd[-1]["upload_time"] for dd in d["releases"].values()]
 
 
 def last_release_date(package):
@@ -89,10 +90,10 @@ def get_version(package, url_pattern=URL_PATTERN):
 
     """
     req = requests.get(url_pattern.format(package=package))
-    version = parse('0')
+    version = parse("0")
     if req.status_code == requests.codes.ok:
         j = json.loads(req.text)
-        releases = j.get('releases', [])
+        releases = j.get("releases", [])
         for release in releases:
             ver = parse(release)
             if not ver.is_prerelease:
@@ -104,9 +105,9 @@ def my_setup(**setup_kwargs):
     from setuptools import setup
     import json
 
-    print('Setup params -------------------------------------------------------')
+    print("Setup params -------------------------------------------------------")
     print(json.dumps(setup_kwargs, indent=2))
-    print('--------------------------------------------------------------------')
+    print("--------------------------------------------------------------------")
     setup(**setup_kwargs)
 
 
@@ -131,13 +132,12 @@ def ujoin(*args):
     ''
     """
     if len(args) == 0 or len(args[0]) == 0:
-        return ''
+        return ""
     return (
-        (args[0][0] == '/') * '/'  # prepend slash if first arg starts with it
-        + '/'.join(x[(x[0] == '/') : (len(x) - (x[-1] == '/'))] for x in args)
-        + (args[-1][-1] == '/') * '/'
+        (args[0][0] == "/") * "/"  # prepend slash if first arg starts with it
+        + "/".join(x[(x[0] == "/") : (len(x) - (x[-1] == "/"))] for x in args)
+        + (args[-1][-1] == "/") * "/"
     )  # append slash if last arg ends with it
-
 
 
 ########### Partial and incremental formatting ##########################################
@@ -151,7 +151,7 @@ class PartialFormatter(Formatter):
         try:
             return super().get_value(key, args, kwargs)
         except KeyError:
-            return '{' + key + '}'
+            return "{" + key + "}"
 
     def format_fields_set(self, s):
         return {x[1] for x in self.parse(s) if x[1]}
@@ -249,9 +249,9 @@ def format_str_vals_of_dict(d, *, max_formatting_loops=10, **kwargs):
             break
     else:
         raise ValueError(
-            f'There are still some unformatted fields, '
-            f'but I reached my max {max_formatting_loops} allowed loops. '
-            + f'Those fields are: {set(_fields_to_format(d)) - (set(d) | set(kwargs))}'
+            f"There are still some unformatted fields, "
+            f"but I reached my max {max_formatting_loops} allowed loops. "
+            + f"Those fields are: {set(_fields_to_format(d)) - (set(d) | set(kwargs))}"
         )
 
     return d

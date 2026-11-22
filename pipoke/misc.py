@@ -14,7 +14,7 @@ def is_from_module(obj, module):
     >>> is_from_module(is_from_module, collections)
     False
     """
-    return getattr(obj, '__module__', '').startswith(module.__name__)
+    return getattr(obj, "__module__", "").startswith(module.__name__)
 
 
 def second_party_names(module, obj_filt=None):
@@ -41,7 +41,7 @@ def second_party_names(module, obj_filt=None):
     True
     """
     obj_filt = obj_filt or (lambda x: x)
-    for attr in filter(lambda a: not a.startswith('_'), dir(module)):
+    for attr in filter(lambda a: not a.startswith("_"), dir(module)):
         obj = getattr(module, attr)
         if is_from_module(obj, module) and obj_filt(obj):
             yield attr
@@ -52,20 +52,20 @@ n_pkgs = len(pkg_names)
 
 
 def words_containing_py_free_for_pkg():
-    return is_not_a_pkg_name('^.+py.+$')
+    return is_not_a_pkg_name("^.+py.+$")
 
 
 def words_starting_with_py_free_for_pkg():
-    return is_not_a_pkg_name('py.*$')
+    return is_not_a_pkg_name("py.*$")
 
 
 def words_ending_with_py_free_for_pkg():
-    return is_not_a_pkg_name('.*py$')
+    return is_not_a_pkg_name(".*py$")
 
 
 def word_vs_pkgs_regex_stats(regex):
     words, pkgs, pkgs_words = words_and_pkg_names_satisfying_regex(regex)
-    return {'words': len(words) / n_words, 'pkgs': len(pkgs) / n_pkgs}
+    return {"words": len(words) / n_words, "pkgs": len(pkgs) / n_pkgs}
 
 
 def multiple_word_vs_pkgs_regex_stats(patterns):
@@ -79,7 +79,10 @@ def multiple_word_vs_pkgs_regex_stats(patterns):
     if not isinstance(patterns, dict):
         patterns = {p: p for p in patterns}
 
-    return [dict(pattern=name, **word_vs_pkgs_regex_stats(pattern)) for name, pattern in patterns.items()]
+    return [
+        dict(pattern=name, **word_vs_pkgs_regex_stats(pattern))
+        for name, pattern in patterns.items()
+    ]
 
 
 def subsequence_counts(n=2, n_of_top_counts=10):
@@ -111,9 +114,9 @@ def subsequence_counts(n=2, n_of_top_counts=10):
     for w in pkg_names:
         pkg_subseqs.update(window(w, n))
 
-    t = [(''.join(x[0]), x[1]) for x in word_subseqs.most_common(n_of_top_counts)]
-    tt = [(''.join(x[0]), x[1]) for x in pkg_subseqs.most_common(n_of_top_counts)]
-    return {'words': t, 'pkgs': tt}
+    t = [("".join(x[0]), x[1]) for x in word_subseqs.most_common(n_of_top_counts)]
+    tt = [("".join(x[0]), x[1]) for x in pkg_subseqs.most_common(n_of_top_counts)]
+    return {"words": t, "pkgs": tt}
 
 
 # print(multiple_word_vs_pkgs_regex_stats({'contains "py"': '.*py.*',

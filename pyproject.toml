@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pipoke"
-version = "0.0.23"
+version = "0.0.24"
 description = "Utils to acquire stuff from pypi and interrogate it"
 readme = "README.md"
 requires-python = ">=3.10"

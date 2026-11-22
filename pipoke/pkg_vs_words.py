@@ -1,4 +1,5 @@
 """Compare package names with words (e.g. which package names are also dictionary words)."""
+
 import inspect
 import re
 import pickle
@@ -18,7 +19,7 @@ def is_standard_lib_path(path):
 
 def standard_lib_module_names(
     is_standard_lib_path=is_standard_lib_path,
-    name_filt=lambda name: not name.startswith('_'),
+    name_filt=lambda name: not name.startswith("_"),
 ):
     return filter(
         name_filt,
@@ -36,37 +37,37 @@ builtin_pkg_names = set(standard_lib_module_names())
 builtin_obj_names = {x.lower() for x in dir(builtins)}
 
 py_reserved_words = {
-    'and',
-    'as',
-    'assert',
-    'break',
-    'class',
-    'continue',
-    'def',
-    'del',
-    'elif',
-    'else',
-    'except',
-    'exec',
-    'finally',
-    'for',
-    'from',
-    'global',
-    'if',
-    'import',
-    'in',
-    'is',
-    'lambda',
-    'not',
-    'or',
-    'pass',
-    'print',
-    'raise',
-    'return',
-    'try',
-    'while',
-    'with',
-    'yield',
+    "and",
+    "as",
+    "assert",
+    "break",
+    "class",
+    "continue",
+    "def",
+    "del",
+    "elif",
+    "else",
+    "except",
+    "exec",
+    "finally",
+    "for",
+    "from",
+    "global",
+    "if",
+    "import",
+    "in",
+    "is",
+    "lambda",
+    "not",
+    "or",
+    "pass",
+    "print",
+    "raise",
+    "return",
+    "try",
+    "while",
+    "with",
+    "yield",
 }
 
 builtin_names = builtin_pkg_names | builtin_obj_names | py_reserved_words
@@ -79,7 +80,7 @@ def get_all_words_from_wordnet():
 
 
 try:
-    all_words = pickle.load(open(dpath('all_words.p'), 'rb'))
+    all_words = pickle.load(open(dpath("all_words.p"), "rb"))
 except:
     try:
         all_words = get_all_words_from_wordnet()
@@ -90,7 +91,7 @@ except:
         )
         all_words = set()
 
-simple_words = set(filter(re.compile('[a-z]+$').match, all_words))
+simple_words = set(filter(re.compile("[a-z]+$").match, all_words))
 
 pypi_pkg_names = set(pkg_name_stub)
 pkg_names = pypi_pkg_names.union(builtin_names)  # pypi + builtin pkg names
@@ -101,17 +102,17 @@ available_simple_words = simple_words - pkg_names
 
 def str_for_func(func):
     s = func.__name__
-    if s != '<lambda>':
+    if s != "<lambda>":
         return s
     else:
         fs = inspect.getsource(func)
-        fs = fs[: fs.index('\n')]
-        lambda_re = re.compile('.+lambda (.+)')
+        fs = fs[: fs.index("\n")]
+        lambda_re = re.compile(".+lambda (.+)")
         return lambda_re.match(fs).group(1)
 
 
 def disp_str_for_counts(words, pkgs, pkgs_words):
-    s = ''
+    s = ""
     s += f"{len(words)} words"
     s += f"{len(pkgs)} package names"
     s += f"{len(pkgs_words)} that are both"
@@ -142,7 +143,7 @@ def words_and_pkg_names_satisfying_regex(regex, print_counts=False):
     )
 
 
-def is_not_a_pkg_name(regex='.*', words=None):
+def is_not_a_pkg_name(regex=".*", words=None):
     """
     Filter words, keeping only those that are not already pypi package names.
     :param regex: Extra (regular expression) filter to apply
@@ -151,5 +152,5 @@ def is_not_a_pkg_name(regex='.*', words=None):
     """
     words = words or simple_words
     if isinstance(words, str):
-        words = set(map(lambda w: w.strip(), words.split(',')))
+        words = set(map(lambda w: w.strip(), words.split(",")))
     return set(filter(re.compile(regex).match, words)).difference(pkg_names)

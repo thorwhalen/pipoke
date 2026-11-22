@@ -1,5 +1,5 @@
 """Pip installed package diagnosis
-The tools here will help you install and diagnose packages in a test virtual 
+The tools here will help you install and diagnose packages in a test virtual
 environment.
 
 Here, checkout diagnose_pkgs, which takes a list of packages and runs a list of
@@ -30,7 +30,7 @@ def current_virtual_environment_path():
     """
     Returns the path of the current virtual environment the function is called from
     """
-    return os.environ.get('VIRTUAL_ENV', None)
+    return os.environ.get("VIRTUAL_ENV", None)
 
 
 DFLT_TEST_ENV = current_virtual_environment_path()
@@ -44,16 +44,16 @@ def fullpath(path):
     return os.path.abspath(os.path.expanduser(path))
 
 
-def virtualenv_path(virtual_env, virtual_envs_dir=''):
+def virtualenv_path(virtual_env, virtual_envs_dir=""):
     """
     Get the path of a virtual environment given its name.
     """
-    return fullpath(os.path.join(virtual_envs_dir or '', virtual_env))
+    return fullpath(os.path.join(virtual_envs_dir or "", virtual_env))
 
 
 def create_virtualenv(
     virtual_env=DFLT_TEST_ENV,
-    virtual_envs_dir='',
+    virtual_envs_dir="",
 ):
     """
     Create a virtual environment using specified managers if it doesn't exist.
@@ -67,7 +67,7 @@ def create_virtualenv(
         print(f"INFO: Virtual environment already exists: {virtual_env}")
     else:
         print(f"INFO: Creating virtual environment: {virtual_env}")
-        subprocess.run([sys.executable, '-m', 'venv', virtual_env], check=True)
+        subprocess.run([sys.executable, "-m", "venv", virtual_env], check=True)
 
     return virtual_env  # Exit the function if venv succeeded
 
@@ -77,14 +77,14 @@ def activate_virtualenv(virtualenv_path):
     Activate a virtual environment given its path.
     """
     # Determine the current shell
-    shell = os.path.basename(os.getenv('SHELL'))
+    shell = os.path.basename(os.getenv("SHELL"))
 
-    if shell in ('bash', 'zsh'):
-        activation_script = 'activate'
-    elif shell == 'fish':
-        activation_script = 'activate.fish'
-    elif sys.platform == 'win32':
-        activation_script = 'Scripts/activate.bat'
+    if shell in ("bash", "zsh"):
+        activation_script = "activate"
+    elif shell == "fish":
+        activation_script = "activate.fish"
+    elif sys.platform == "win32":
+        activation_script = "Scripts/activate.bat"
     else:
         raise NotImplementedError("Unsupported shell or platform")
 
@@ -110,7 +110,7 @@ def install_package(pkg_name, virtual_env=DFLT_TEST_ENV, *, verbose=True):
     try:
         capture_output = not verbose
         subprocess.run(
-            [os.path.join(virtual_env, 'bin', 'pip'), 'install', pkg_name],
+            [os.path.join(virtual_env, "bin", "pip"), "install", pkg_name],
             capture_output=capture_output,
             check=True,
         )
@@ -147,11 +147,11 @@ def _pkg_folder(pkg_name: str) -> str:
     installed.
     """
     dist_name = _distribution_name(pkg_name)
-    dist_location = pkg_metadata.distribution(dist_name).locate_file('')
+    dist_location = pkg_metadata.distribution(dist_name).locate_file("")
     # realpath: the metadata API can hand back a path relative to a relative
     # sys.path entry (the cwd, notably), and this value is passed on to os.walk,
     # to unittest discovery, and to a pytest subprocess.
-    return os.path.join(os.path.realpath(dist_location), dist_name.replace('-', '_'))
+    return os.path.join(os.path.realpath(dist_location), dist_name.replace("-", "_"))
 
 
 def is_package_installed(pkg_name):
@@ -170,10 +170,10 @@ def is_package_installed(pkg_name):
 
 def dflt_pkg_diagnosis(imported_pkg):
     non_dunder_attributes = [
-        attr for attr in dir(imported_pkg) if not attr.startswith('__')
+        attr for attr in dir(imported_pkg) if not attr.startswith("__")
     ]
     return {
-        'non_dunder_attributes_count': len(non_dunder_attributes),
+        "non_dunder_attributes_count": len(non_dunder_attributes),
     }
 
 
@@ -197,8 +197,8 @@ def dflt_folder_diagnosis(pkg_folder):
     )
 
     return {
-        'total_files': total_files,
-        'total_bytes': total_bytes,
+        "total_files": total_files,
+        "total_bytes": total_bytes,
         # Add other useful information here
     }
 
@@ -232,9 +232,9 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
         # Run doctests using doctest module
         try:
             doctest_results = doctest.testmod(pkg_name)
-            test_diagnoses['doctest_results'] = {
-                'attempts': doctest_results.attempted,
-                'failures': doctest_results.failed,
+            test_diagnoses["doctest_results"] = {
+                "attempts": doctest_results.attempted,
+                "failures": doctest_results.failed,
             }
         except Exception:
             pass
@@ -244,18 +244,18 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
         suite = loader.discover(pkg_folder, pattern="test_*.py")
         unittest_runner = unittest.TextTestRunner(verbosity=2)
         unittest_result = unittest_runner.run(suite)
-        test_diagnoses['unittest_results'] = {
-            'total_tests_found': unittest_result.testsRun,
-            'total_failures': len(unittest_result.failures),
-            'total_errors': len(unittest_result.errors),
+        test_diagnoses["unittest_results"] = {
+            "total_tests_found": unittest_result.testsRun,
+            "total_failures": len(unittest_result.failures),
+            "total_errors": len(unittest_result.errors),
         }
 
         try:
             # Run pytest tests within the virtual environment
             cmd = [
-                os.path.join(virtual_env, 'bin', 'python'),
-                '-m',
-                'pytest',
+                os.path.join(virtual_env, "bin", "python"),
+                "-m",
+                "pytest",
                 pkg_folder,
             ]
             # Capture the output for analysis if needed
@@ -271,10 +271,10 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
             failed_tests = result.stdout.count("FAILED")
 
             # Get test diagnoses
-            test_diagnoses['pytest_results'] = {
-                'total_tests_found': passed_tests + failed_tests,
-                'total_passed_tests': passed_tests,
-                'total_failed_tests': failed_tests,
+            test_diagnoses["pytest_results"] = {
+                "total_tests_found": passed_tests + failed_tests,
+                "total_passed_tests": passed_tests,
+                "total_failed_tests": failed_tests,
             }
         except subprocess.CalledProcessError or Exception:
             pass
@@ -285,7 +285,7 @@ def run_pkg_tests(pkg_name, virtual_env=DFLT_TEST_ENV):
         return None
 
 
-URL_PATTERN = 'https://pypi.python.org/pypi/{package}/json'
+URL_PATTERN = "https://pypi.python.org/pypi/{package}/json"
 
 
 # Note: Also found in pipoke.distribution and yb package
@@ -320,25 +320,25 @@ def dflt_json_info_extractor(pkg_name):
     info_dict = json_package_info(pkg_name)
     extractor = path_get.paths_getter(
         [
-            'info.description',
-            'info.summary',
-            'info.author',
-            'info.version',
-            'info.project_urls',
-            'info.home_page',
-            'releases',
+            "info.description",
+            "info.summary",
+            "info.author",
+            "info.version",
+            "info.project_urls",
+            "info.home_page",
+            "releases",
         ],
         on_error=path_get.return_none_on_error,
     )
     d = extractor(info_dict)
-    releases = d.pop('releases', ())
-    d['n_releases'] = len(releases)
+    releases = d.pop("releases", ())
+    d["n_releases"] = len(releases)
     if releases:
-        release = next(iter(releases[d['info.version']]), None)
+        release = next(iter(releases[d["info.version"]]), None)
         if release:
-            d['last_release.size'] = release.get('size', None)
-            d['last_relase.upload_time_iso_8601'] = release.get(
-                'upload_time_iso_8601', None
+            d["last_release.size"] = release.get("size", None)
+            d["last_relase.upload_time_iso_8601"] = release.get(
+                "upload_time_iso_8601", None
             )
     return d
 
@@ -352,14 +352,14 @@ Diagnoses = Union[DiagnosisPairs, DiagnosisDict]
 # default diagnoses,
 # as a tuple of (name, diagnosis_func) pairs because python still has no frozendict!
 DFLT_DIAGNOSES = (
-    ('json_info', dflt_json_info_extractor),
-    ('pkg_diagnosis_result', run_pkg_diagnosis),
-    ('pkg_folder_diagnosis_result', run_folder_diagnosis),
-    ('test_diagnosis_result', run_pkg_tests),
+    ("json_info", dflt_json_info_extractor),
+    ("pkg_diagnosis_result", run_pkg_diagnosis),
+    ("pkg_folder_diagnosis_result", run_folder_diagnosis),
+    ("test_diagnosis_result", run_pkg_tests),
 )
 
 diagnosis_funcs = dict(DFLT_DIAGNOSES)
-diagnosis_funcs['all_json_info'] = json_package_info
+diagnosis_funcs["all_json_info"] = json_package_info
 
 
 def _resolve_diagnoses(diagnoses: Diagnoses) -> DiagnosisDict:
@@ -406,7 +406,7 @@ class Settable(Protocol):
 
 def _resolve_store_factory(store_factory: str | Callable[[], Settable]):
     if isinstance(store_factory, str):
-        if store_factory == 'dict':
+        if store_factory == "dict":
             store_factory = dict
         elif os.path.isdir(store_factory):
             dirpath = store_factory
@@ -509,7 +509,7 @@ def manage_installation(pkg_name, install_pkg_if_not_installed=True, *, verbose=
         # Uninstall the package if it was installed in this process
         if install_pkg_if_not_installed and not pkg_was_in_environment:
             subprocess.run(
-                ['pip', 'uninstall', '-y', pkg_name], capture_output=not verbose
+                ["pip", "uninstall", "-y", pkg_name], capture_output=not verbose
             )
 
 
@@ -574,7 +574,7 @@ def diagnose_pkg(
 
 def virtualenv_manager(
     virtual_env: str,
-    virtual_envs_dir: str = '',  # empty string will have the effect of looking in the current directory
+    virtual_envs_dir: str = "",  # empty string will have the effect of looking in the current directory
 ) -> str | None:
     """
     Check if a virtual environment was created using a specific manager,
@@ -585,17 +585,17 @@ def virtualenv_manager(
     :return: The name of the virtual environment manager if found, None otherwise
 
     """
-    virtual_envs_dir = virtual_envs_dir or ''
+    virtual_envs_dir = virtual_envs_dir or ""
     virtual_env_path = os.path.join(virtual_envs_dir, virtual_env)
     # Check if it's a venv-created virtual environment
-    venv_marker = os.path.join(virtual_env_path, 'pyvenv.cfg')
+    venv_marker = os.path.join(virtual_env_path, "pyvenv.cfg")
     if os.path.exists(venv_marker):
-        return 'venv'
+        return "venv"
 
     # Check if it's a pyenv-created virtual environment
-    pyenv_version_file = os.path.join(virtual_env_path, '.python-version')
+    pyenv_version_file = os.path.join(virtual_env_path, ".python-version")
     if os.path.exists(pyenv_version_file):
-        return 'pyenv'
+        return "pyenv"
 
     return None
 
@@ -605,7 +605,7 @@ def pyenv_exists():
     Check if pyenv is installed.
     """
     try:
-        subprocess.run(['pyenv', '--version'], check=True, capture_output=True)
+        subprocess.run(["pyenv", "--version"], check=True, capture_output=True)
         return True
     except FileNotFoundError:
         return False
@@ -630,7 +630,7 @@ def create_virtualenv_with_pyenv(virtual_environment_name):
 
     # Create the virtual environment
     try:
-        subprocess.run(['pyenv', 'virtualenv', virtual_environment_name], check=True)
+        subprocess.run(["pyenv", "virtualenv", virtual_environment_name], check=True)
         return get_pyenv_virtualenv_path(virtual_environment_name)
     except subprocess.CalledProcessError:
         return False
@@ -653,7 +653,7 @@ def activate_virtualenv_with_pyenv(virtual_environment_name):
 
     # Activate the virtual environment
     try:
-        subprocess.run(['pyenv', 'activate', virtual_environment_name], check=True)
+        subprocess.run(["pyenv", "activate", virtual_environment_name], check=True)
     except subprocess.CalledProcessError:
         raise RuntimeError("Failed to activate the virtual environment")
 
@@ -664,10 +664,8 @@ def get_pyenv_virtualenv_path(virtual_environment_name):
     """
     try:
         # Run the pyenv virtualenv-prefix command and capture the output
-        cmd = ['pyenv', 'virtualenv-prefix', virtual_environment_name]
-        result = subprocess.run(
-            cmd, capture_output=True, text=True
-        )
+        cmd = ["pyenv", "virtualenv-prefix", virtual_environment_name]
+        result = subprocess.run(cmd, capture_output=True, text=True)
 
         # Check if the command was successful and has output
         if result.returncode == 0 and result.stdout:
@@ -688,51 +686,51 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Run package diagnosis on a list of packages'
+        description="Run package diagnosis on a list of packages"
     )
     parser.add_argument(
-        'packages',
-        metavar='package',
+        "packages",
+        metavar="package",
         type=str,
-        nargs='+',
+        nargs="+",
         help=(
-            'The names of the packages to diagnose. Could be a single package name or '
-            'multiple package names separated by strings. Could also be a local '
-            'filepath to a requirements file (any file whose lines are pip installable)'
+            "The names of the packages to diagnose. Could be a single package name or "
+            "multiple package names separated by strings. Could also be a local "
+            "filepath to a requirements file (any file whose lines are pip installable)"
         ),
     )
-    diagnoses_names = ', '.join(name for name, _ in diagnosis_funcs.items())
+    diagnoses_names = ", ".join(name for name, _ in diagnosis_funcs.items())
     parser.add_argument(
-        '--diagnoses',
+        "--diagnoses",
         type=str,
-        nargs='+',
+        nargs="+",
         help=(
-            f'The names of the diagnoses to run. Any combination of: {diagnoses_names}. '
-            'If not specified, all diagnoses will be run.'
+            f"The names of the diagnoses to run. Any combination of: {diagnoses_names}. "
+            "If not specified, all diagnoses will be run."
         ),
     )
     parser.add_argument(
-        '--store_factory',
+        "--store_factory",
         type=str,
-        default='dict',
+        default="dict",
         help=(
-            'A factory for a store to store the results. '
-            'Can be a folder path (in which case a Files store will be created in that folder), '
+            "A factory for a store to store the results. "
+            "Can be a folder path (in which case a Files store will be created in that folder), "
             'or "dict" (in which case a dict will be used), '
-            'or any other string (in which case a dict will be used).'
+            "or any other string (in which case a dict will be used)."
         ),
     )
     parser.add_argument(
-        '--install_pkg_if_not_installed',
+        "--install_pkg_if_not_installed",
         type=bool,
         default=True,
-        help='Whether to install the package if it is not installed',
+        help="Whether to install the package if it is not installed",
     )
     parser.add_argument(
-        '--verbose',
+        "--verbose",
         type=bool,
         default=True,
-        help='Whether to print verbose output',
+        help="Whether to print verbose output",
     )
 
     args = parser.parse_args()
@@ -741,10 +739,10 @@ def main():
     d = diagnose_pkgs(args.packages, args.diagnoses)
 
     # print the results
-    print('------ RESULTS ------')
+    print("------ RESULTS ------")
     print(json.dumps(d, indent=2))
 
 
 # script to run diagnose_pkgs from the command line
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
